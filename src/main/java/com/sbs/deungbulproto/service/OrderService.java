@@ -138,4 +138,8 @@ public class OrderService {
 
 	}
 
+	public List<Order> getForPrintRequestOrdersByExpertRegion(String region) {
+		return orderDao.getForPrintRequestOrdersByExpertRegion(region);
+	}
+
 }

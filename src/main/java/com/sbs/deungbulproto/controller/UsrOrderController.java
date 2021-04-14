@@ -43,6 +43,20 @@ public class UsrOrderController {
 		return new ResultData("S-1", "성공", "order", order);
 	}
 
+	@GetMapping("/usr/order/requestListInExpertRegion")
+	@ResponseBody
+	public ResultData showRequestListInExpertRegion(HttpServletRequest req, int memberId) {
+		Expert expert = expertService.getExpert(memberId);
+
+		if (expert == null) {
+			return new ResultData("F-1", "존재하지 않는 회원 입니다.");
+		}
+
+		List<Order> orders = orderService.getForPrintRequestOrdersByExpertRegion(expert.getRegion());
+
+		return new ResultData("S-1", "성공", "orders", orders);
+	}
+
 	@GetMapping("/usr/order/list")
 	@ResponseBody
 	public ResultData showList(HttpServletRequest req, int memberId, String memberType) {
@@ -180,7 +194,7 @@ public class UsrOrderController {
 		orderService.orderReject(orderId, expertId);
 		expertService.setWork1(expertId);
 
-		return new ResultData("S-1", "요청을 취소하였습니다.", "id", orderId);
+		return new ResultData("S-1", "의뢰를 포기하였습니다.", "id", orderId);
 	}
 
 	@GetMapping("/usr/order/accept")

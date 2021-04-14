@@ -34,4 +34,6 @@ public interface OrderDao {
 
 	void orderReject(@Param("orderId") Integer orderId, @Param("expertId") Integer expertId);
 
+	List<Order> getForPrintRequestOrdersByExpertRegion(@Param("region") String region);
+
 }

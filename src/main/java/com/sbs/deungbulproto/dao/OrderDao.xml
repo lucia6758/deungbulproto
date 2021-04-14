@@ -16,7 +16,7 @@
 	<select id="getForPrintOrder" resultType="Order">
 		SELECT O.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS
+		IFNULL(E.name, "미정") AS
 		extra__expertName,
 		C.cellphoneNo AS extra__clientCellphoneNo,
 		E.cellphoneNo AS extra__expertCellphoneNo
@@ -30,6 +30,26 @@
 		WHERE O.id = #{id}
 	</select>
 
+	<select id="getForPrintRequestOrdersByExpertRegion"
+		resultType="Order">
+		SELECT O.*,
+		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
+		IFNULL(E.name, "미정") AS extra__expertName,
+		C.cellphoneNo AS
+		extra__clientCellphoneNo,
+		E.cellphoneNo AS extra__expertCellphoneNo
+		FROM `order` AS O
+		LEFT JOIN `client` AS C
+		ON O.clientId = C.id
+		LEFT JOIN
+		`expert` AS E
+		ON O.expertId = E.id
+		WHERE 1
+		AND O.region = #{region}
+		AND
+		O.stepLevel = 1
+		ORDER BY O.id DESC
+	</select>
 
 	<select id="orders" resultType="Order">
 		SELECT *
@@ -42,7 +62,7 @@
 	<select id="getForPrintOrders" resultType="Order">
 		SELECT O.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS
+		IFNULL(E.name, "미정") AS
 		extra__expertName,
 		C.cellphoneNo AS extra__clientCellphoneNo,
 		E.cellphoneNo AS extra__expertCellphoneNo
@@ -60,16 +80,18 @@
 		SELECT O.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
 		IFNULL(E.name,
-		"탈퇴회원") AS extra__expertName,
+		"미정") AS extra__expertName,
 		C.cellphoneNo AS
 		extra__clientCellphoneNo,
 		E.cellphoneNo AS extra__expertCellphoneNo
 		FROM `order` AS O
-		LEFT JOIN `client` AS C
+		LEFT JOIN
+		`client` AS C
 		ON O.clientId = C.id
 		LEFT JOIN
 		`expert` AS E
-		ON O.expertId = E.id
+		ON O.expertId =
+		E.id
 		WHERE 1
 		<if test="clientId != 0">
 			AND O.clientId = #{clientId}
@@ -79,22 +101,26 @@
 		</if>
 		ORDER BY O.id DESC
 	</select>
-	
+
 	<select id="getForPrintExpertOrders" resultType="Order">
 		SELECT O.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS extra__expertName,
+		IFNULL(E.name, "탈퇴회원") AS
+		extra__expertName,
 		C.cellphoneNo AS extra__clientCellphoneNo,
 		E.cellphoneNo AS extra__expertCellphoneNo
 		FROM `order` AS O
-		LEFT JOIN `client` AS C
+		LEFT JOIN
+		`client` AS C
 		ON O.clientId = C.id
 		LEFT JOIN `expert` AS E
-		ON O.expertId = E.id
-		WHERE 1		    	
-    	AND O.region = #{region}
-    	AND O.stepLevel = 1    	
-		ORDER BY O.id DESC
+		ON O.expertId
+		= E.id
+		WHERE 1
+		AND O.region = #{region}
+		AND O.stepLevel = 1
+		ORDER BY O.id
+		DESC
 	</select>
 
 	<!-- public void addOrder(String title, String body); -->
@@ -156,23 +182,23 @@
 		</set>
 		WHERE id = #{id}
 	</update>
-	
+
 	<update id="orderReject">
 		UPDATE `order`
-		<set>			
-		updateDate = NOW(),
-		stepLevel = 1,
-		expertId = 0											
+		<set>
+			updateDate = NOW(),
+			stepLevel = 1,
+			expertId = 0
 		</set>
 		WHERE id = #{orderId}
 	</update>
-	
+
 	<update id="setSetp2">
 		UPDATE `order`
-		<set>			
-		updateDate = NOW(),
-		stepLevel = 2,
-		expertId = #{expertId}											
+		<set>
+			updateDate = NOW(),
+			stepLevel = 2,
+			expertId = #{expertId}
 		</set>
 		WHERE id = #{orderId}
 	</update>

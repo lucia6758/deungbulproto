@@ -255,21 +255,15 @@ ALTER TABLE rating ADD KEY (relTypeCode, relId);
 # SELECT * FROM reply WHERE relTypeCode = 'article'; # O
 # SELECT * FROM reply WHERE relId = 5 AND relTypeCode = 'article'; # X
 
-# 장례 테이블 생성
-CREATE TABLE `funeral` (
+# 관리자
+CREATE TABLE `adm` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
-    deceasedName CHAR(30) NOT NULL, #고인 이름
-    bereavedName CHAR(30) NOT NULL, #유족 이름
-    `startDate` DATE NOT NULL, #장례시작일
-    `endDate` DATE NOT NULL, #장례종료일
-    `head` INT(10) UNSIGNED NOT NULL, #예상인원수
-    religion CHAR(200) NOT NULL, #종교
-    `body` TEXT NOT NULL, #상세요구사항
-    funeralHome CHAR(200) NOT NULL, #장례식장
-    `expertId` INT(10) UNSIGNED NOT NULL,
-    `clientId` INT(10) UNSIGNED NOT NULL,
-    stepLevel SMALLINT(2) UNSIGNED DEFAULT 2 NOT NULL COMMENT '(2=의뢰승인(장례진행중),3=장례종료(종료확인요청),4=종료확인(최종종료))'
+    loginId CHAR(30) NOT NULL,
+    loginPw VARCHAR(100) NOT NULL,
+    authKey CHAR(80) NOT NULL,
+    `name` CHAR(30) NOT NULL,
+    `email` CHAR(100) NOT NULL,
+    `cellphoneNo` CHAR(20) NOT NULL
 );
-
