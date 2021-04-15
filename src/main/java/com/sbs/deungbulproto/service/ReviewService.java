@@ -72,7 +72,7 @@ public class ReviewService {
 
 	public ResultData modifyReview(Map<String, Object> param) {
 		reviewDao.modifyReview(param);
-		return new ResultData("S-1", "리뷰를 수정하였습니다.");
+		return new ResultData("S-1", "리뷰를 수정하였습니다.", "id", param.get("id"));
 	}
 
 	public ResultData getForPrintReview(Integer id) {

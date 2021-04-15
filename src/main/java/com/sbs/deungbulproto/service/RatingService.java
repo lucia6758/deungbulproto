@@ -9,6 +9,7 @@ import com.sbs.deungbulproto.dao.RatingDao;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Rating;
 import com.sbs.deungbulproto.dto.ResultData;
+import com.sbs.deungbulproto.dto.Review;
 
 @Service
 public class RatingService {
@@ -52,6 +53,14 @@ public class RatingService {
 	public ResultData modifyRating(Map<String, Object> param) {
 		ratingDao.modifyRating(param);
 		return new ResultData("S-1", "성공");
+	}
+
+	public boolean isClientCanAddRating(String relTypeCode, Integer relId, Integer clientId) {
+		Rating rating = ratingDao.getRatingRelClient(relTypeCode, relId, clientId);
+		if (rating != null) {
+			return false;
+		}
+		return true;
 	}
 
 }
