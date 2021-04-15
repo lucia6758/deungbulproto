@@ -179,6 +179,16 @@ public class AdmMemberController extends BaseController {
 		return "adm/member/expertList";
 	}
 
+	@GetMapping("/adm/member/expertDetail")
+	public String showExpertDetail(HttpServletRequest req, int id) {
+
+		Expert expert = expertService.getForPrintExpert(id);
+
+		req.setAttribute("expert", expert);
+
+		return "adm/member/expertDetail";
+	}
+
 	@GetMapping("/adm/member/clientList")
 	public String showClientList(HttpServletRequest req, @RequestParam Map<String, Object> param) {
 

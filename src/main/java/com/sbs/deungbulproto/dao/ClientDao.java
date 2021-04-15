@@ -34,8 +34,6 @@ public interface ClientDao {
 
 	List<Client> getForPrintClients(Map<String, Object> param);
 
-	void clientWithdrawal(@Param("clientId") int clientId);
-
 	void delete(@Param("id") int id);
 
 }

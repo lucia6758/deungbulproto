@@ -221,11 +221,6 @@ public class ExpertService {
 		return new ResultData("S-1", "회원정보가 수정되었습니다.");
 	}
 
-	public void expertWithdrawal(int expertId) {
-		expertDao.expertWithdrawal(expertId);
-
-	}
-
 	public List<Expert> getForPrintExperts(Map<String, Object> param) {
 		return expertDao.getForPrintExperts(param);
 	}

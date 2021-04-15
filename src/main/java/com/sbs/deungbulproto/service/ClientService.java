@@ -154,11 +154,6 @@ public class ClientService {
 		modifyClient(modifyArg);
 	}
 
-	public void clientWithdrawal(int clientId) {
-		clientDao.clientWithdrawal(clientId);
-
-	}
-
 	public List<Client> getForPrintClients(Map<String, Object> param) {
 
 		return clientDao.getForPrintClients(param);

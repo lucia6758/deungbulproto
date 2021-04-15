@@ -129,9 +129,4 @@
 		AND `email` = #{email}
 	</select>
 
-	<delete id="clientWithdrawal">
-		DELETE FROM `client`
-		WHERE id = #{clientId}
-	</delete>
-
 </mapper>

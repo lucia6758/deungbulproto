@@ -37,11 +37,11 @@
 					</a>
 				</div>
 				<div class="flex items-center mt-4">
-					<a href="detail?id=${expert.id}"
-						class="text-blue-500 hover:underline" title="자세히 보기">
+					<a href="expertDetail?id=${expert.id}"
+						class="text-blue-500 hover:underline" title="회원상세정보">
 						<span>
 							<i class="fas fa-info"></i>
-							<span class="hidden sm:inline">자세히 보기</span>
+							<span class="hidden sm:inline">회원 상세 정보</span>
 						</span>
 					</a>
 					<a href="modify?id=${expert.id}"
@@ -51,12 +51,12 @@
 							<span class="hidden sm:inline">수정</span>
 						</span>
 					</a>
-					<a onclick="if ( !confirm('삭제하시겠습니까?') ) return false;"
+					<a onclick="if ( !confirm('탈퇴시키시겠습니까?') ) return false;"
 						href="doDelete?id=${expert.id}"
 						class="ml-2 text-blue-500 hover:underline">
 						<span>
 							<i class="fas fa-trash"></i>
-							<span class="hidden sm:inline">삭제</span>
+							<span class="hidden sm:inline">강제탈퇴</span>
 						</span>
 					</a>
 					<div class="flex-grow"></div>
