@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -85,7 +86,7 @@ public class UsrOrderController {
 		return "usr/order/add";
 	}
 
-	@GetMapping("/usr/order/doAdd")
+	@PostMapping("/usr/order/doAdd")
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param) {
 
@@ -132,7 +133,7 @@ public class UsrOrderController {
 		return orderService.deleteOrder(id);
 	}
 
-	@GetMapping("/usr/order/doModify")
+	@PostMapping("/usr/order/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 

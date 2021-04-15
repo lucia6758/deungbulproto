@@ -40,8 +40,6 @@ public class OrderService {
 	public ResultData deleteOrder(int id) {
 		orderDao.deleteOrder(id);
 
-		genFileService.deleteGenFiles("order", id);
-
 		return new ResultData("S-1", "요청을 취소하였습니다.", "id", id);
 	}
 

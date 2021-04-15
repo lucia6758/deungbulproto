@@ -67,13 +67,10 @@ public class UsrClientController extends BaseController {
 
 	@PostMapping("/usr/client/doModify")
 	@ResponseBody
-	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+	public ResultData doModify(@RequestParam Map<String, Object> param) {
 		if (param.isEmpty()) {
 			return new ResultData("F-2", "수정할 정보를 입력해주세요.");
 		}
-
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-		param.put("id", loginedMemberId);
 
 		return clientService.modifyClient(param);
 	}
@@ -116,9 +113,6 @@ public class UsrClientController extends BaseController {
 			return new ResultData("F-1", "region을 입력해주세요.");
 		}
 
-		if (param.get("career") == null) {
-			return new ResultData("F-1", "career를 입력해주세요.");
-		}
 
 		return clientService.join(param);
 	}
@@ -162,7 +156,7 @@ public class UsrClientController extends BaseController {
 			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
 
-		Client existingClient = clientService.getClientByLoginId(loginId);
+		Client existingClient = clientService.getForPrintClientByLoginId(loginId);
 
 		if (existingClient == null) {
 			return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
@@ -176,8 +170,8 @@ public class UsrClientController extends BaseController {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 
-		return new ResultData("S-1", String.format("%s님 환영합니다.", existingClient.getName()), "authKey",
-				existingClient.getAuthKey(), "id", existingClient.getId(), "name", existingClient.getName());
+		return new ResultData("S-1", String.format("%s님 반갑습니다.", existingClient.getName()), "authKey",
+				existingClient.getAuthKey(), "client", existingClient);
 	}
 
 	@GetMapping("/usr/client/detail")
