@@ -123,6 +123,22 @@ public class UsrClientController extends BaseController {
 		return clientService.join(param);
 	}
 
+	@GetMapping("/usr/client/doDelete")
+	@ResponseBody
+	public ResultData doDelete(HttpServletRequest req, int id) {
+
+		Client client = clientService.getForPrintClient(id);
+
+		if (client == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+		}
+
+		clientService.delete(id);
+		req.setAttribute("name", client.getName());
+
+		return new ResultData("S-1", "성공", "body", client.getName());
+	}
+
 	@PostMapping("/usr/client/withdrawal")
 	@ResponseBody
 	public ResultData withdrawalClient(String loginId, String loginPw) {

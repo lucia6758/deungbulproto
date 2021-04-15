@@ -164,4 +164,9 @@ public class ClientService {
 		return clientDao.getForPrintClients(param);
 	}
 
+	public void delete(int id) {
+		clientDao.delete(id);
+
+	}
+
 }

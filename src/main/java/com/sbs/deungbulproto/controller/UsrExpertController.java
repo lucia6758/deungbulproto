@@ -89,6 +89,22 @@ public class UsrExpertController extends BaseController {
 		return expertService.join(param);
 	}
 
+	@GetMapping("/usr/expert/doDelete")
+	@ResponseBody
+	public ResultData doDelete(HttpServletRequest req, int id) {
+
+		Expert expert = expertService.getForPrintExpert(id);
+
+		if (expert == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+		}
+
+		expertService.delete(id);
+		req.setAttribute("name", expert.getName());
+
+		return new ResultData("S-1", "성공", "body", expert.getName());
+	}
+
 	@GetMapping("/usr/expert/expertByAuthKey")
 	@ResponseBody
 	public ResultData showExpertByAuthKey(String authKey) {

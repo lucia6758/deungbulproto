@@ -121,7 +121,6 @@ public class ExpertService {
 			String imgUrl = genFile.getForPrintUrl();
 			expert.setExtra__thumbImg(imgUrl);
 		}
-
 	}
 
 	public List<Expert> getExperts() {
@@ -229,6 +228,11 @@ public class ExpertService {
 
 	public List<Expert> getForPrintExperts(Map<String, Object> param) {
 		return expertDao.getForPrintExperts(param);
+	}
+
+	public void delete(int id) {
+		expertDao.delete(id);
+
 	}
 
 }

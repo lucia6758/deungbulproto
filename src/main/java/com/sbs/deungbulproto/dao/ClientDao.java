@@ -36,4 +36,6 @@ public interface ClientDao {
 
 	void clientWithdrawal(@Param("clientId") int clientId);
 
+	void delete(@Param("id") int id);
+
 }

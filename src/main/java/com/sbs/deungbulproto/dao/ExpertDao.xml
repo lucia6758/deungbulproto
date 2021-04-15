@@ -110,10 +110,11 @@
 		FROM `expert`
 		WHERE id = #{id}
 	</select>
-	
+
 	<select id="getExpertsForSendSms" resultType="Expert">
 		SELECT *
-		FROM `expert`
+		FROM
+		`expert`
 		WHERE `work` = 1
 		AND region = #{region}
 	</select>
@@ -167,6 +168,11 @@
 		WHERE id = #{id}
 	</update>
 
+	<delete id="delete">
+		DELETE FROM `expert`
+		WHERE id = #{id};
+	</delete>
+
 	<select id="getExpertByNameAndEmail" resultType="Expert">
 		SELECT *
 		FROM
@@ -184,7 +190,7 @@
 		AND `loginId` = #{loginId}
 		AND `email` = #{email}
 	</select>
-	
+
 	<delete id="expertWithdrawal">
 		DELETE FROM `expert`
 		WHERE id = #{expertId}
