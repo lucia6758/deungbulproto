@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sbs.deungbulproto.dao.EventDao">
+
+	<select id="getEvent" resultType="Event">
+		SELECT *
+		FROM `event`
+		WHERE 1
+		AND	relTypeCode = 'order'
+		AND	relTypeCode2 = #{relTypeCode2}
+		AND	relId = #{relId}
+		AND	relId2 = #{relId2}
+	</select>
+
+	<insert id="addEvent" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `event`
+		<set>
+			regDate = NOW(),
+			updateDate = NOW(),
+			relTypeCode = 'order',
+			relTypeCode2 = #{relTypeCode2},
+			relId = #{relId},
+			relId2 = #{relId2},
+			<if test="accept != null">
+				accept = #{accept},
+			</if>
+			<if test="accept == null">
+				accept = 0,
+			</if>
+			<if test="stepLevel != null">
+				stepLevel = #{stepLevel},
+			</if>
+			<if test="stepLevel == null">
+				stepLevel = 0,
+			</if>
+			<if test="directOrder != null">
+				directOrder = #{directOrder},
+			</if>
+			<if test="directOrder == null">
+				directOrder = 0,
+			</if>
+			<if test="region != null">
+				region = #{region}
+			</if>
+			<if test="region == null">
+				region = ''
+			</if>
+		</set>
+	</insert>
+	
+	<update id="updateEvent">
+		UPDATE `event`
+		<set>
+			updateDate = NOW()
+			<if test="accept != null">
+				, accept = #{accept}
+			</if>
+			<if test="stepLevel != null">
+				, stepLevel = #{stepLevel}
+			</if>
+			<if test="directOrder != null">
+				, directOrder = #{directOrder}
+			</if>
+			<if test="region != null">
+				, region = #{region}
+			</if>
+		</set>
+		WHERE 1
+		AND	relTypeCode = 'order'
+		AND	relTypeCode2 = #{relTypeCode2}
+		AND	relId = #{relId}
+		AND	relId2 = #{relId2}
+	</update>
+	
+	<select id="getTotalCount" resultType="Integer">
+		SELECT COUNT(*)
+		FROM `event`
+		WHERE 1
+		AND relTypeCode = 'order'
+		AND relTypeCode2 = #{memberType}
+		AND relId2 = #{memberId}
+		<if test="region != null">
+		OR region = #{region}
+		</if>
+	</select>
+
+
+</mapper>

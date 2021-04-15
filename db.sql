@@ -283,3 +283,36 @@ SET regDate = NOW(),
     `name` = 'adm1',
     `email` = 'adm1@adm1.com',
     `cellphoneNo` = 01011111111;
+
+
+#이벤트
+CREATE TABLE `event`(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME DEFAULT NULL, # 작성날짜
+    updateDate DATETIME DEFAULT NULL, # 갱신날짜
+    `relTypeCode` CHAR(20) NOT NULL, #order
+    `relTypeCode2` CHAR(20) NOT NULL, #client or expert
+    relId INT(10) UNSIGNED NOT NULL, #orderId
+    relId2 INT(10) UNSIGNED NOT NULL, #clientId or expertId
+    `accept` INT(10) UNSIGNED, #for client
+    stepLevel INT(10) UNSIGNED, #3~4 for client / 5 #for expert
+    directOrder INT(10) UNSIGNED, #for expert
+    `region` CHAR(100) NOT NULL #for expert
+);
+
+#의뢰인 이벤트 시나리오(내 요청 접수/거절, 진행단계변경 3-4)
+SELECT COUNT(*) 
+FROM `event`
+WHERE 1
+AND relTypeCode = 'order'
+AND relTypeCode2 = 'client'
+AND relId2 = 1 #clientId
+
+#지도사 이벤트 시나리오(내 지역 신규요청, 장례종료최종확인 5, 의뢰직접요청)
+SELECT COUNT(*)
+FROM `event`
+WHERE 1
+AND relTypeCode = 'order'
+AND relTypeCode2 = 'expert'
+AND relId2 = 4 #expertId
+OR region = '대전광역시'

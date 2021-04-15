@@ -172,7 +172,6 @@ public class UsrOrderController {
 	@ResponseBody
 	public ResultData doChangeStepLevel(int id, int stepLevel) {
 
-		System.out.println(stepLevel);
 		int nextStepLevel = stepLevel + 1;
 
 		return orderService.changeStepLevel(id, nextStepLevel);
