@@ -27,8 +27,6 @@
 	src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
 	defer></script>
 
-
-
 <div class="bg-gray-100">
 	<div class="w-full text-white bg-main-color">
 		<div x-data="{ open: false }"
@@ -128,5 +126,6 @@
 			</div>
 		</div>
 	</div>
+</div>
 
-	<%@ include file="../part/mainLayoutFoot.jspf"%>
+<%@ include file="../part/mainLayoutFoot.jspf"%>
