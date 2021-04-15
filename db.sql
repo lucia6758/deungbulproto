@@ -2,10 +2,6 @@ DROP DATABASE IF EXISTS deungbulTest;
 CREATE DATABASE deungbulTest;
 USE deungbulTest;
 
-DROP DATABASE IF EXISTS deungbulTest;
-CREATE DATABASE deungbulTest;
-USE deungbulTest;
-
 # 의뢰인 앱, 전문가 앱  공통
 # 요청사항 테이블
 CREATE TABLE `order` (

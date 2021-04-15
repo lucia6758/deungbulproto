@@ -25,11 +25,7 @@
 
 	<select id="getForPrintExperts" resultType="Expert">
 		SELECT E.*,
-		IF(
-		(ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) >= 0.5,
-		ROUND(AVG(R.point)),
-		ROUND(AVG(R.point))-0.5
-		) AS extra__ratingPoint
+		AVG(R.point) AS extra__ratingPoint
 		FROM `expert` AS E
 		LEFT JOIN `rating` AS R
 		ON
@@ -42,11 +38,7 @@
 
 	<select id="getExperts" resultType="Expert">
 		SELECT E.*,
-		IF(
-		(ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) > 0.5,
-		ROUND(AVG(R.point)),
-		ROUND(AVG(R.point))-0.5
-		) AS extra__ratingPoint
+		AVG(R.point) AS extra__ratingPoint
 		FROM `expert` AS E
 		LEFT JOIN `rating` AS R
 		ON
@@ -59,11 +51,7 @@
 
 	<select id="getForPrintExpertsByRegion" resultType="Expert">
 		SELECT E.*,
-		IF(
-		(ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) >= 0.5,
-		ROUND(AVG(R.point)),
-		ROUND(AVG(R.point))-0.5
-		) AS extra__ratingPoint
+		AVG(R.point) AS extra__ratingPoint
 		FROM `expert` AS E
 		LEFT JOIN `rating` AS R
 		ON
