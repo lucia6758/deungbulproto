@@ -155,7 +155,7 @@ public class UsrClientController extends BaseController {
 		return new ResultData("S-1", String.format("유효한 회원입니다."), "client", existingClient);
 	}
 
-	@GetMapping("/usr/client/authKey")
+	@PostMapping("/usr/client/authKey")
 	@ResponseBody
 	public ResultData showAuthKey(String loginId, String loginPw) {
 		if (loginId == null) {
