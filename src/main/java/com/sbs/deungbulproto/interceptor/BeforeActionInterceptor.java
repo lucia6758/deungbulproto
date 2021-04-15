@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.sbs.deungbulproto.dto.Adm;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Expert;
+import com.sbs.deungbulproto.service.AdmMemberService;
 import com.sbs.deungbulproto.service.ClientService;
 import com.sbs.deungbulproto.service.ExpertService;
 import com.sbs.deungbulproto.util.Util;
@@ -22,6 +24,8 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 	private ClientService clientService;
 	@Autowired
 	private ExpertService expertService;
+	@Autowired
+	private AdmMemberService admService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -50,9 +54,11 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 
 		int loginedClientId = 0;
 		int loginedExpertId = 0;
+		int loginedAdmId = 0;
 
 		Client loginedClient = null;
 		Expert loginedExpert = null;
+		Adm loginedAdm = null;
 
 		String authKey = request.getParameter("authKey");
 
@@ -75,6 +81,14 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 					request.setAttribute("authKeyStatus", "valid");
 					loginedExpertId = loginedExpert.getId();
 				}
+			} else if (authKies[0].contains("5")) {
+				loginedAdm = admService.getAdmByAuthKey(authKey);
+				if (loginedAdm == null) {
+					request.setAttribute("authKeyStatus", "invalid");
+				} else {
+					request.setAttribute("authKeyStatus", "valid");
+					loginedAdmId = loginedAdm.getId();
+				}
 			}
 
 		} else {
@@ -87,20 +101,25 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			} else if (session.getAttribute("loginedExpertId") != null) {
 				loginedExpertId = (int) session.getAttribute("loginedExpertId");
 				loginedExpert = expertService.getExpert(loginedExpertId);
+			} else if (session.getAttribute("loginedAdmId") != null) {
+				loginedAdmId = (int) session.getAttribute("loginedAdmId");
+				loginedAdm = admService.getAdm(loginedAdmId);
 			}
 		}
 
 		boolean isLogined = false;
 		boolean isAdmin = false;
 
-		if (loginedClient != null || loginedExpert != null) {
+		if (loginedClient != null || loginedExpert != null || loginedAdm != null) {
 			isLogined = true;
 		}
 
 		request.setAttribute("loginedClientId", loginedClientId);
 		request.setAttribute("loginedExpertId", loginedExpertId);
+		request.setAttribute("loginedAdm", loginedAdm);
 		request.setAttribute("loginedClient", loginedClient);
 		request.setAttribute("loginedExpert", loginedExpert);
+		request.setAttribute("loginedAdm", loginedAdm);
 		request.setAttribute("isLogined", isLogined);
 		request.setAttribute("isAdmin", isAdmin);
 

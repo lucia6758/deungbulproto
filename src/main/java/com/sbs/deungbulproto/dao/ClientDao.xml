@@ -42,6 +42,7 @@
 			`cellphoneNo` =
 			#{cellphoneNo},
 			`region` = #{region},
+			`career` = #{career},
 			authKey = CONCAT("authKey1__",
 			UUID(), "__", RAND())
 		</set>
@@ -97,6 +98,9 @@
 			<if test="region != null">
 				, `region` = #{region}
 			</if>
+			<if test="career != null">
+				, `career` = #{career}
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -118,5 +122,10 @@
 		AND `loginId` = #{loginId}
 		AND `email` = #{email}
 	</select>
+	
+	<delete id="clientWithdrawal">
+		DELETE FROM `client`
+		WHERE id = #{clientId}
+	</delete>
 
 </mapper>

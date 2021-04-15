@@ -56,23 +56,29 @@ public class ClientService {
 	public Client getForPrintClient(int id) {
 		Client client = clientDao.getForPrintClient(id);
 
-		updateForPrint(client);
+		if (client != null) {
+			updateForPrint(client);
+		}
 
 		return client;
 	}
 
 	public Client getForPrintClientByAuthKey(String authKey) {
 		Client client = clientDao.getClientByAuthKey(authKey);
-		// 기본 멤버에서 추가정보를 업데이트해서 리턴
-		updateForPrint(client);
+
+		if (client != null) {
+			updateForPrint(client);
+		}
 
 		return client;
 	}
 
 	public Client getForPrintClientByLoginId(String loginId) {
 		Client client = clientDao.getClientByLoginId(loginId);
-		// 기본 멤버에서 추가정보를 업데이트해서 리턴
-		updateForPrint(client);
+
+		if (client != null) {
+			updateForPrint(client);
+		}
 
 		return client;
 	}
@@ -81,11 +87,9 @@ public class ClientService {
 		// 멤버의 섬네일 이미지 가져오기
 		GenFile genFile = genFileService.getGenFile("client", client.getId(), "common", "attachment", 1);
 
-		System.out.println("1111111");
 		// 만약, 멤버의 섬네일 이미지가 있으면 extra__thumbImg 업데이트
 		if (genFile != null) {
 
-			System.out.println("이미지 가져옴222222");
 			String imgUrl = genFile.getForPrintUrl();
 			client.setSetExtra__thumbImg(imgUrl);
 		}
@@ -148,6 +152,16 @@ public class ClientService {
 
 		// 회원정보 수정
 		modifyClient(modifyArg);
+	}
+
+	public void clientWithdrawal(int clientId) {
+		clientDao.clientWithdrawal(clientId);
+
+	}
+
+	public List<Client> getForPrintClients(Map<String, Object> param) {
+
+		return clientDao.getForPrintClients(param);
 	}
 
 }

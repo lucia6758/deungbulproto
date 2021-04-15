@@ -41,11 +41,11 @@ public class AdmMemberService {
 		return isAdmin(actor.getId());
 	}
 
-	public Adm getMember(int id) {
+	public Adm getAdm(int id) {
 		return admMemberDao.getMember(id);
 	}
 
-	public Adm getMemberByAuthKey(String authKey) {
+	public Adm getAdmByAuthKey(String authKey) {
 		return admMemberDao.getMemberByAuthKey(authKey);
 	}
 

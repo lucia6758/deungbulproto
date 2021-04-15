@@ -136,6 +136,7 @@ CREATE TABLE `expert` (
     `cellphoneNo` CHAR(20) NOT NULL,
     `region` CHAR(100) NOT NULL, #지역(시도)
     `license` CHAR(100) NOT NULL,  #자격증
+    `career` CHAR(50) NOT NULL,
     `work` SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=대기중 2=작업중)'
 );
 
@@ -152,11 +153,13 @@ SET regDate = NOW(),
     loginId = 'expert1',
     loginPw = 'expert1',
     authKey = 'authKey2__1',
+    acknowledgment_step = 2,
     `name` = 'expert1',
     `email` = 'expert1@expert1.com',
     `cellphoneNo` = 01011111111,
     `region` = '대전광역시',
     `license` = '장례지도사2급',
+    `career` = '1년',
     `work` = 2;
 
 INSERT INTO `expert`
@@ -165,11 +168,13 @@ SET regDate = NOW(),
     loginId = 'expert2',
     loginPw = 'expert2',
     authKey = 'authKey2__2',
+    acknowledgment_step = 1,
     `name` = 'expert2',
     `email` = 'expert2@expert2.com',
     `cellphoneNo` = 01022222222,
     `region` = '서울특별시',
-    `license` = '장례지도사2급',
+    `license` = '장례지도사자격증',
+    `career` = '2년',
     `work` = 2;
 
 INSERT INTO `expert`
@@ -178,11 +183,13 @@ SET regDate = NOW(),
     loginId = 'expert3',
     loginPw = 'expert3',
     authKey = 'authKey2__3',
+    acknowledgment_step = 2,
     `name` = 'expert3',
     `email` = 'expert3@expert3.com',
     `cellphoneNo` = 01033333333,
     `region` = '부산광역시',
-    `license` = '장례지도사2급',
+    `license` = '장례지도사자격증',
+    `career` = '5년',
     `work` = 2;
     
 INSERT INTO `expert`
@@ -191,11 +198,13 @@ SET regDate = NOW(),
     loginId = 'expert4',
     loginPw = 'expert4',
     authKey = 'authKey2__4',
+    acknowledgment_step = 2,
     `name` = 'expert4',
     `email` = 'expert4@expert4.com',
     `cellphoneNo` = 01044444444,
     `region` = '대전광역시',
-    `license` = '장례지도사2급',
+    `license` = '장례지도사자격증',
+    `career` = '8년',
     `work` = 2;
    
 # 파일 테이블 생성 
@@ -267,3 +276,14 @@ CREATE TABLE `adm` (
     `email` CHAR(100) NOT NULL,
     `cellphoneNo` CHAR(20) NOT NULL
 );
+
+# 관리자회원 테스트 데이터
+INSERT INTO `adm`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    loginId = 'adm1',
+    loginPw = 'adm1',
+    authKey = 'authKey5__1',
+    `name` = 'adm1',
+    `email` = 'adm1@adm1.com',
+    `cellphoneNo` = 01011111111;

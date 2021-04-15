@@ -24,7 +24,7 @@ public class UsrClientController extends BaseController {
 
 	@GetMapping("/usr/client/login")
 	public String login() {
-		return "client/member/login";
+		return "/usr/client/login";
 	}
 
 	@PostMapping("/usr/client/doLogin")
@@ -80,7 +80,7 @@ public class UsrClientController extends BaseController {
 
 	@GetMapping("/usr/client/join")
 	public String showJoin() {
-		return "expert/member/join";
+		return "usr/client/join";
 	}
 
 	@PostMapping("/usr/client/doJoin")
@@ -116,7 +116,35 @@ public class UsrClientController extends BaseController {
 			return new ResultData("F-1", "region을 입력해주세요.");
 		}
 
+		if (param.get("career") == null) {
+			return new ResultData("F-1", "career를 입력해주세요.");
+		}
+
 		return clientService.join(param);
+	}
+
+	@PostMapping("/usr/client/withdrawal")
+	@ResponseBody
+	public ResultData withdrawalClient(String loginId, String loginPw) {
+		if (loginId == null) {
+			return new ResultData("F-1", "loginId를 입력해주세요.");
+		}
+
+		Client existingClient = clientService.getForPrintClientByLoginId(loginId);
+
+		if (existingClient == null) {
+			return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
+		}
+		if (loginPw == null) {
+			return new ResultData("F-1", "loginPw를 입력해주세요.");
+		}
+		if (existingClient.getLoginPw().equals(loginPw) == false) {
+			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
+		}
+
+		clientService.clientWithdrawal(existingClient.getId());
+
+		return new ResultData("S-1", "회원 탈퇴 완료");
 	}
 
 	@GetMapping("/usr/client/clientByAuthKey")

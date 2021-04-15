@@ -35,4 +35,6 @@ public interface ExpertDao {
 	Expert getExpertByNameAndEmail(Map<String, Object> param);
 
 	Expert getMemberByLoginIdAndEmail(Map<String, Object> param);
+
+	void expertWithdrawal(@Param("expertId") int expertId);
 }

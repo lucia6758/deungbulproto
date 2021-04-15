@@ -114,9 +114,12 @@ public class OrderService {
 		String msg = "요청을 수락하셨습니다.";
 
 		if (nextStepLevel == 3) {
-			msg = "장례종료 확인 요청을 보냈습니다.";
+			msg = "장례 진행";
 		}
 		if (nextStepLevel == 4) {
+			msg = "장례종료 확인 요청을 보냈습니다.";
+		}
+		if (nextStepLevel == 5) {
 			msg = "의뢰가 최종 종료되었습니다. 리뷰를 작성해주세요.";
 		}
 

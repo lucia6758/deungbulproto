@@ -184,5 +184,10 @@
 		AND `loginId` = #{loginId}
 		AND `email` = #{email}
 	</select>
+	
+	<delete id="expertWithdrawal">
+		DELETE FROM `expert`
+		WHERE id = #{expertId}
+	</delete>
 
 </mapper>

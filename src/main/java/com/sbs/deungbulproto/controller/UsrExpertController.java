@@ -53,46 +53,40 @@ public class UsrExpertController extends BaseController {
 
 	@PostMapping("/usr/expert/doJoin")
 	@ResponseBody
-	public String doJoin(@RequestParam Map<String, Object> param) {
+	public ResultData doJoin(@RequestParam Map<String, Object> param) {
 
 		if (param.get("loginId") == null) {
-			return Util.msgAndBack("loginId를 입력해주세요.");
+			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
 
 		Expert existingExpert = expertService.getExpertByLoginId((String) param.get("loginId"));
 
 		if (existingExpert != null) {
-			return Util.msgAndBack("이미 사용중인 로그인아이디 입니다.");
+			return new ResultData("F-1", "이미 사용중인 로그인아이디 입니다.");
 		}
 		if (param.get("loginPw") == null) {
-			return Util.msgAndBack("loginPw를 입력해주세요.");
+			return new ResultData("F-1", "loginPw를 입력해주세요.");
 		}
 		if (param.get("name") == null) {
-			return Util.msgAndBack("name을 입력해주세요.");
+			return new ResultData("F-1", "name을 입력해주세요.");
 		}
 		if (param.get("email") == null) {
-			return Util.msgAndBack("email을 입력해주세요.");
+			return new ResultData("F-1", "email을 입력해주세요.");
 		}
 		if (param.get("cellphoneNo") == null) {
-			return Util.msgAndBack("cellphoneNo를 입력해주세요.");
+			return new ResultData("F-1", "cellphoneNo를 입력해주세요.");
 		}
 		if (param.get("region") == null) {
-			return Util.msgAndBack("region를 입력해주세요.");
+			return new ResultData("F-1", "region을 입력해주세요.");
 		}
 		if (param.get("license") == null) {
-			return Util.msgAndBack("license를 입력해주세요.");
+			return new ResultData("F-1", "license를 입력해주세요.");
 		}
 		if (param.get("career") == null) {
-			return Util.msgAndBack("career를 입력해주세요.");
+			return new ResultData("F-1", "career를 입력해주세요.");
 		}
 
-		expertService.join(param);
-
-		String msg = String.format("%s님 환영합니다.", param.get("name"));
-
-		String redirectUrl = Util.ifEmpty((String) param.get("redirectUrl"), "../expert/login");
-
-		return Util.msgAndReplace(msg, redirectUrl);
+		return expertService.join(param);
 	}
 
 	@GetMapping("/usr/expert/expertByAuthKey")
@@ -129,8 +123,21 @@ public class UsrExpertController extends BaseController {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 
+		// 가입승인단계 확인
+		if (existingExpert.getAcknowledgment_step() == 1) {
+			return new ResultData("F-4",
+					"회원님은 현재 '가입대기'상태입니다. 회원정보 검토 후 '가입승인'이 완료됩니다.(검토는 최초 신청일로부터 최대 3일이 소요될 수 있습니다.)");
+		}
+		if (existingExpert.getAcknowledgment_step() == 3) {
+			// 회원 정보 삭제
+			expertService.expertWithdrawal(existingExpert.getId());
+
+			return new ResultData("F-4", "죄송합니다. 회원정보 검토 결과 입력해주신 내용에 미흡한 부분이 발견되어 가입이 '거절'되셨습니다. 다시 회원가입 해주세요.");
+		}
+
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingExpert.getName()), "authKey",
 				existingExpert.getAuthKey(), "expert", existingExpert);
+
 	}
 
 	@RequestMapping("/usr/expert/login")
@@ -256,6 +263,31 @@ public class UsrExpertController extends BaseController {
 			return new ResultData("F-1", "email을 입력해주세요.");
 		}
 
-		return expertService.getClientByLoginIdAndEmail(param);
+		return expertService.getExpertByLoginIdAndEmail(param);
 	}
+
+	@PostMapping("/usr/expert/withdrawal")
+	@ResponseBody
+	public ResultData withdrawalExpert(String loginId, String loginPw) {
+		if (loginId == null) {
+			return new ResultData("F-1", "loginId를 입력해주세요.");
+		}
+
+		Expert existingExpert = expertService.getForPrintExpertByLoginId(loginId);
+
+		if (existingExpert == null) {
+			return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
+		}
+		if (loginPw == null) {
+			return new ResultData("F-1", "loginPw를 입력해주세요.");
+		}
+		if (existingExpert.getLoginPw().equals(loginPw) == false) {
+			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
+		}
+
+		expertService.expertWithdrawal(existingExpert.getId());
+
+		return new ResultData("S-1", "회원 탈퇴 완료");
+	}
+
 }
