@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.sbs.deungbulproto.dto.Adm;
+import com.sbs.deungbulproto.dto.ResultData;
 
 @Mapper
 public interface AdmMemberDao {

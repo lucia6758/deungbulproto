@@ -282,4 +282,4 @@ SET regDate = NOW(),
     authKey = 'authKey5__1',
     `name` = 'adm1',
     `email` = 'adm1@adm1.com',
-    `cellphoneNo` = 01011111111;
+    `cellphoneNo` = '01011111111';
