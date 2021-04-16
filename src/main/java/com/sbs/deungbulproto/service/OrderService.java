@@ -65,16 +65,13 @@ public class OrderService {
 			param2.put("relId", relId);
 			param2.put("relId2", relId2);
 			param2.put("region", region);
-			// 기존 이벤트 존재여부 체크
-			Event event = eventService.getEvent(param2);
-			// 기존 이벤트가 있고 region이 ""이면 기존 이벤트를 업데이트
-			if (event != null && event.getRegion().equals("")) {
-				eventService.updateEvent(param2);
-			}
-			// 기존 이벤트가 없으면 새 이벤트 생성
-			if (event == null) {
-				eventService.addEvent(param2);
-			}
+			/*
+			 * // 기존 이벤트 존재여부 체크 Event event = eventService.getEvent(param2); // 기존 이벤트가 있고
+			 * region이 ""이면 기존 이벤트를 업데이트 if (event != null && event.getRegion().equals(""))
+			 * { eventService.updateEvent(param2); } // 기존 이벤트가 없으면 새 이벤트 생성 if (event ==
+			 * null) { eventService.addEvent(param2); }
+			 */
+			eventService.addEvent(param2);
 		}
 		
 		/* 의뢰가 들어오면 이벤트 생성 또는 업데이트 끝 */

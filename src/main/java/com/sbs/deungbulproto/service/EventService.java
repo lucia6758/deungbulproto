@@ -32,4 +32,8 @@ public class EventService {
 		return eventDao.getTotalCount(param);
 	}
 
+	public void resetEventCount(Map<String, Object> param) {
+		eventDao.resetEventCount(param);
+	}
+
 }

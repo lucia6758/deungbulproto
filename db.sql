@@ -294,10 +294,11 @@ CREATE TABLE `event`(
     `relTypeCode2` CHAR(20) NOT NULL, #client or expert
     relId INT(10) UNSIGNED NOT NULL, #orderId
     relId2 INT(10) UNSIGNED NOT NULL, #clientId or expertId
-    `accept` INT(10) UNSIGNED, #for client
-    stepLevel INT(10) UNSIGNED, #3~4 for client / 5 #for expert
-    directOrder INT(10) UNSIGNED, #for expert
-    `region` CHAR(100) NOT NULL #for expert
+    `accept` INT(10) UNSIGNED NOT NULL, #for client
+    stepLevel INT(10) UNSIGNED NOT NULL, #3~4 for client / 5 #for expert
+    directOrder INT(10) UNSIGNED NOT NULL, #for expert
+    `region` CHAR(100) NOT NULL, #for expert
+
 );
 
 #의뢰인 이벤트 시나리오(내 요청 접수/거절, 진행단계변경 3-4)

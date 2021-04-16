@@ -12,6 +12,7 @@ import com.sbs.deungbulproto.dto.Expert;
 import com.sbs.deungbulproto.dto.ResultData;
 import com.sbs.deungbulproto.service.EventService;
 import com.sbs.deungbulproto.service.ExpertService;
+import com.sbs.deungbulproto.util.Util;
 
 @Controller
 public class UsrEventController {
@@ -41,10 +42,32 @@ public class UsrEventController {
 			String region = expert.getRegion();
 			param.put("region", region);
 		}
-
+		
 		int eventTotalCount = eventService.getTotalCount(param);
 
 		return new ResultData("S-1", "성공", "totalCount", eventTotalCount);
+	}
+	
+	
+	@GetMapping("/usr/event/resetEvent")
+	@ResponseBody
+	public ResultData resetEvent(String memberType, Integer memberId) {
+
+		if (memberType == null) {
+			return new ResultData("F-1", "memberType를 입력해주세요.");
+		}
+		
+		if (memberId == null) {
+			return new ResultData("F-1", "memberId를 입력해주세요.");
+		}
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("relTypeCode2", memberType);
+		param.put("relId2", memberId);
+
+		eventService.resetEventCount(param);
+		
+		return new ResultData("S-1", "성공");
 	}
 
 }

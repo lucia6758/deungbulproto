@@ -43,11 +43,12 @@
 				directOrder = 0,
 			</if>
 			<if test="region != null">
-				region = #{region}
+				region = #{region},
 			</if>
 			<if test="region == null">
-				region = ''
+				region = '',
 			</if>
+			alertCheckStatus = 0
 		</set>
 	</insert>
 	
@@ -82,10 +83,27 @@
 		AND relTypeCode = 'order'
 		AND relTypeCode2 = #{memberType}
 		AND relId2 = #{memberId}
+		AND alertCheckStatus = 0
 		<if test="region != null">
-		OR region = #{region}
+		AND accept = 0
+		<!-- OR region = #{region} -->
 		</if>
 	</select>
-
+	
+	<update id="resetEventCount">		
+		UPDATE `event`
+		<set>
+			updateDate = NOW()
+			, accept = 0
+			, stepLevel = 0
+			, directOrder = 0
+			, alertCheckStatus = 1
+		</set>
+		WHERE 1
+		AND	relTypeCode = 'order'
+		AND	relTypeCode2 = #{relTypeCode2}
+		AND	relId2 = #{relId2}
+	</update>
+	
 
 </mapper>

@@ -17,4 +17,7 @@ public interface EventDao {
 
 	int getTotalCount(Map<String, Object> param);
 
+	void resetEventCount(Map<String, Object> param);
+
+
 }
