@@ -199,4 +199,14 @@ public class AdmMemberController extends BaseController {
 		return "adm/member/clientList";
 	}
 
+	@RequestMapping("/adm/member/doConfirmExpert")
+	@ResponseBody
+	public ResultData doConfirmExpert(int expertId, String confirm) {
+		if (confirm.contains("Y")) {
+			return expertService.confirmExpert(expertId);
+		} else {
+			return expertService.rejectExpert(expertId);
+		}
+	}
+
 }

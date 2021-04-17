@@ -93,6 +93,15 @@
 			return;
 		}
 		
+		form.nickname.value = form.nickname.value.trim();
+		
+		if (form.nickname.value.length == 0) {
+			alert('별명을 입력해주세요.');
+			form.nickname.focus();
+			
+			return;
+		}
+		
 		form.email.value = form.email.value.trim();
 		
 		if (form.email.value.length == 0) {
@@ -158,17 +167,19 @@
 		class="container mx-auto min-h-screen flex items-center justify-center">
 		<div class="w-full">
 			<div class="logo-bar flex justify-center mt-3">
-				<a href="#" class="logo"> <span> <i
-						class="fas fa-people-arrows"></i>
-				</span> <span>ADMIN</span>
+				<a href="#" class="logo">
+					<span>
+						<i class="fas fa-people-arrows"></i>
+					</span>
+					<span>ADMIN</span>
 				</a>
 			</div>
 			<form
 				class="formLogin bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4"
 				action="doJoin" method="POST"
 				onsubmit="JoinForm__checkAndSubmit(this); return false;">
-				<input type="hidden" name="genFileIdsStr" /> <input type="hidden"
-					name="redirectUrl" value="${param.redirectUrl}" />
+				<input type="hidden" name="genFileIdsStr" />
+				<input type="hidden" name="redirectUrl" value="${param.redirectUrl}" />
 				<div class="flex flex-col mb-4 md:flex-row">
 					<div class="p-1 md:w-36 md:flex md:items-center">
 						<span>로그인아이디</span>
@@ -202,17 +213,6 @@
 							autofocus="autofocus" type="password"
 							placeholder="로그인 비밀번호를 입력해주세요." name="loginPwConfirm"
 							maxlength="20" />
-					</div>
-				</div>
-				<div class="flex flex-col mb-4 md:flex-row">
-					<div class="p-1 md:w-36 md:flex md:items-center">
-						<span>프로필이미지</span>
-					</div>
-					<div class="p-1 md:flex-grow">
-						<input accept="image/gif, image/jpeg, image/png"
-							class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-							autofocus="autofocus" type="file" placeholder="프로필이미지를 선택해주세요."
-							name="file__member__0__common__attachment__1" maxlength="20" />
 					</div>
 				</div>
 				<div class="flex flex-col mb-4 md:flex-row">
@@ -251,12 +251,13 @@
 				</div>
 				<div class="flex flex-col mb-4 md:flex-row">
 					<div class="p-1 md:w-36 md:flex md:items-center">
-						<span>로그인</span>
+						<span></span>
 					</div>
 					<div class="p-1">
 						<input
 							class="btn-primary bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
-							type="submit" value="회원가입" /> <a onclick="history.back();"
+							type="submit" value="회원가입" />
+						<a onclick="history.back();"
 							class="btn-info bg-green-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded inline-block">뒤로가기</a>
 					</div>
 				</div>

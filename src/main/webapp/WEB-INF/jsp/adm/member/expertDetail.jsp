@@ -39,25 +39,16 @@
 						<!-- Profile Card -->
 						<div class="bg-white p-3 border-t-4 border-green-400">
 							<div class="image overflow-hidden">
-								<img class="h-auto w-full mx-auto"
-									src="https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-									alt="">
+								<c:if test="${expert.extra__thumbImg != null}">
+									<img class="h-auto w-full mx-auto"
+										src="${expert.extra__thumbImg}" alt="" />
+								</c:if>
+								<c:if test="${expert.extra__thumbImg == null}">
+									<img class="h-auto w-full mx-auto"
+										src="https://via.placeholder.com/500x500?text=NoImage" alt="" />
+								</c:if>
 							</div>
 							<h1 class="text-gray-900 font-bold text-xl leading-8 my-1">${expert.name}</h1>
-							<ul
-								class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-								<li class="flex items-center py-3">
-									<span>Status</span>
-									<span class="ml-auto">
-										<span
-											class="bg-green-500 py-1 px-2 rounded text-white text-sm">Active</span>
-									</span>
-								</li>
-								<li class="flex items-center py-3">
-									<span>가입날짜</span>
-									<span class="ml-auto">${expert.regDate}</span>
-								</li>
-							</ul>
 						</div>
 						<!-- End of profile card -->
 						<div class="my-4"></div>
@@ -80,7 +71,11 @@
 								<span class="tracking-wide">About</span>
 							</div>
 							<div class="text-gray-700">
-								<div class="grid md:grid-cols-2 text-sm">
+								<div class="text-sm">
+									<div class="grid grid-cols-2">
+										<div class="px-4 py-2 font-semibold">가입날짜</div>
+										<div class="px-4 py-2">${expert.regDate}</div>
+									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">이름</div>
 										<div class="px-4 py-2">${expert.name}</div>
@@ -110,8 +105,31 @@
 										<div class="px-4 py-2">${expert.license}</div>
 									</div>
 									<div class="grid grid-cols-2">
-										<div class="px-4 py-2 font-semibold">인증상태</div>
+										<div class="px-4 py-2 font-semibold">인증 상태</div>
 										<div class="px-4 py-2">${expert.acknowledgment_step}</div>
+									</div>
+									<div class="grid grid-rows-2">
+										<div class="px-4 py-2 font-semibold">인증 파일</div>
+										<div class="px-4 py-2">${expert.extra__licenseImg}</div>
+									</div>
+									<div class="grid grid-cols-2">
+										<div class="px-4 py-2 font-semibold">인증 확인</div>
+										<div class="grid grid-cols-2 px-4 py-2">
+											<form action="doConfirmExpert" method="POST">
+												<input type="hidden" name="confirm" value="Y" />
+												<input type="hidden" name="expertId" value="${expert.id}" />
+												<button
+													class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-700 rounded shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none"
+													type="submit" onclick="history.back();">확인</button>
+											</form>
+											<form action="doConfirmExpert" method="POST">
+												<input type="hidden" name="confirm" value="N" />
+												<input type="hidden" name="expertId" value="${expert.id}" />
+												<button
+													class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-red-500 rounded shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none"
+													type="submit" onclick="history.back();">거절</button>
+											</form>
+										</div>
 									</div>
 								</div>
 							</div>
