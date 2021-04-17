@@ -21,6 +21,8 @@ public class OrderService {
 	private EventService eventService;
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private ExpertService expertService;
 
 	public Order getOrder(int id) {
 		return orderDao.getOrder(id);
@@ -34,6 +36,12 @@ public class OrderService {
 		orderDao.addOrder(param);
 		
 		int id = Util.getAsInt(param.get("id"), 0);
+		String region = (String) param.get("region");
+
+		List<Expert> experts = expertService.getExpertsForSendSms(region);
+		for (Expert expert : experts) {
+			Util.sendSms("0100000000", expert.getCellphoneNo(), "장례지도사 의뢰가 올라왔습니다. 링크:~~");
+		}
 
 		/* 의뢰가 들어오면 이벤트 생성 또는 업데이트 시작 */
 		String relTypeCode2 = "expert";

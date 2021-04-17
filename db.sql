@@ -104,7 +104,7 @@ SET regDate = NOW(),
     authKey = 'authKey1__2',
     `name` = 'user2',
     `email` = 'user2@user2.com',
-    `cellphoneNo` = 01022222222,
+    `cellphoneNo` = '010-2222-2222',
     `region` = '인천광역시';
 
 INSERT INTO `client`
@@ -282,7 +282,7 @@ SET regDate = NOW(),
     authKey = 'authKey5__1',
     `name` = 'adm1',
     `email` = 'adm1@adm1.com',
-    `cellphoneNo` = 01011111111;
+    `cellphoneNo` = '010-1111-1111';
 
 
 #이벤트

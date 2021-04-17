@@ -91,7 +91,7 @@ public class ClientService {
 		if (genFile != null) {
 
 			String imgUrl = genFile.getForPrintUrl();
-			client.setSetExtra__thumbImg(imgUrl);
+			client.setExtra__thumbImg(imgUrl);
 		}
 
 	}

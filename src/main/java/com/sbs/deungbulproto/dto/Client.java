@@ -23,6 +23,6 @@ public class Client {
 	private String email;
 	private String region;
 
-	private String setExtra__thumbImg;
+	private String extra__thumbImg;
 
 }

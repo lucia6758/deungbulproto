@@ -179,4 +179,22 @@
 		AND `email` = #{email}
 	</select>
 	
+	<update id="confirmExpert">
+		UPDATE `expert`
+		<set>
+			updateDate = NOW(),
+			`acknowledgment_step` = 2
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="rejectExpert">
+		UPDATE `expert`
+		<set>
+			updateDate = NOW(),
+			`acknowledgment_step` = 3
+		</set>
+		WHERE id = #{id}
+	</update>
+	
 </mapper>

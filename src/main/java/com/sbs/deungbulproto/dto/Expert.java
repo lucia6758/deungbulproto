@@ -32,6 +32,7 @@ public class Expert {
 	private int work;
 
 	private String extra__thumbImg;
+	private String extra__licenseImg;
 	private float extra__ratingPoint;
 	private List<Review> extra__reviews = new ArrayList<Review>();
 

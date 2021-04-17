@@ -121,6 +121,14 @@ public class ExpertService {
 			String imgUrl = genFile.getForPrintUrl();
 			expert.setExtra__thumbImg(imgUrl);
 		}
+
+		// 전문가 인증용
+		GenFile genFile2 = genFileService.getGenFile("expert", expert.getId(), "common", "attachment", 2);
+
+		if (genFile2 != null) {
+			String imgUrl = genFile2.getForPrintUrl();
+			expert.setExtra__licenseImg(imgUrl);
+		}
 	}
 
 	public List<Expert> getExperts() {
@@ -228,6 +236,20 @@ public class ExpertService {
 	public void delete(int id) {
 		expertDao.delete(id);
 
+	}
+
+	public ResultData confirmExpert(int id) {
+		expertDao.confirmExpert(id);
+		return new ResultData("S-1", "전문가 확인 완료");
+	}
+
+	public ResultData rejectExpert(int id) {
+		expertDao.rejectExpert(id);
+		return new ResultData("S-1", "전문가 승인 취소 완료");
+	}
+
+	public List<Expert> getExpertsForSendSms(String region) {
+		return expertDao.getExpertsForSendSms(region);
 	}
 
 }

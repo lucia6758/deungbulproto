@@ -38,4 +38,10 @@ public interface ExpertDao {
 
 	void delete(@Param("id") int id);
 
+	void confirmExpert(@Param("id") int id);
+
+	void rejectExpert(@Param("id") int id);
+
+	List<Expert> getExpertsForSendSms(@Param("region") String region);
+
 }
