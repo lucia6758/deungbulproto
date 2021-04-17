@@ -42,6 +42,12 @@
 			<if test="directOrder == null">
 				directOrder = 0,
 			</if>
+			<if test="cancelOrder != null">
+				cancelOrder = #{cancelOrder},
+			</if>
+			<if test="cancelOrder == null">
+				cancelOrder = 0,
+			</if>
 			<if test="region != null">
 				region = #{region},
 			</if>
@@ -65,9 +71,13 @@
 			<if test="directOrder != null">
 				, directOrder = #{directOrder}
 			</if>
+			<if test="cancelOrder != null">
+				, cancelOrder = #{cancelOrder}
+			</if>
 			<if test="region != null">
 				, region = #{region}
 			</if>
+			, alertCheckStatus = 0
 		</set>
 		WHERE 1
 		AND	relTypeCode = 'order'
@@ -76,7 +86,7 @@
 		AND	relId2 = #{relId2}
 	</update>
 	
-	<select id="getTotalCount" resultType="Integer">
+	<select id="getCount" resultType="Integer">
 		SELECT COUNT(*)
 		FROM `event`
 		WHERE 1
@@ -84,10 +94,7 @@
 		AND relTypeCode2 = #{memberType}
 		AND relId2 = #{memberId}
 		AND alertCheckStatus = 0
-		<if test="region != null">
-		AND accept = 0
-		<!-- OR region = #{region} -->
-		</if>
+		AND region = #{region}
 	</select>
 	
 	<update id="resetEventCount">		
@@ -97,13 +104,34 @@
 			, accept = 0
 			, stepLevel = 0
 			, directOrder = 0
+			, cancelOrder = 0
 			, alertCheckStatus = 1
 		</set>
 		WHERE 1
 		AND	relTypeCode = 'order'
 		AND	relTypeCode2 = #{relTypeCode2}
 		AND	relId2 = #{relId2}
+		AND region = #{region}
 	</update>
 	
-
+	<delete id="deleteEvent">
+		DELETE FROM `event`
+		WHERE 1
+		AND	relTypeCode = 'order'
+		AND	relTypeCode2 = #{relTypeCode2}
+		AND	relId = #{relId}
+		<if test="relId2 != null">
+		AND	relId2 = #{relId2}
+		</if>
+	</delete>
+	
+	<delete id="deleteEventExceptThisExpert">
+		DELETE FROM `event`
+		WHERE 1
+		AND	relTypeCode = 'order'
+		AND	relTypeCode2 = #{relTypeCode2}
+		AND	relId = #{relId}
+		AND	relId2 != #{relId2}
+	</delete>
+	
 </mapper>

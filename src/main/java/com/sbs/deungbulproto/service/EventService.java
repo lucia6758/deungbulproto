@@ -28,12 +28,21 @@ public class EventService {
 		
 	}
 
-	public int getTotalCount(Map<String, Object> param) {
-		return eventDao.getTotalCount(param);
+	public int getCount(Map<String, Object> param) {
+		return eventDao.getCount(param);
 	}
 
 	public void resetEventCount(Map<String, Object> param) {
 		eventDao.resetEventCount(param);
 	}
 
+	public void deleteEvent(Map<String, Object> param) {
+		eventDao.deleteEvent(param);
+	}
+
+	public void deleteEventExceptThisExpert(Map<String, Object> param) {
+		eventDao.deleteEventExceptThisExpert(param);
+	}
+
+	
 }

@@ -18,6 +18,7 @@ public class Event {
 	private int accept;
 	private int stepLevel;
 	private int directOrder;
+	private int cancelOrder;
 	private String region;
 	private int alertCheckStatus;
 
