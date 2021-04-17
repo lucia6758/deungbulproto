@@ -47,7 +47,7 @@ public class OrderService {
 		String relTypeCode2 = "expert";
 		int relId = id;
 		int relId2 = Util.getAsInt(param.get("expertId"), 0);
-		String region = (String) param.get("region");
+//		String region = (String) param.get("region");
 		// 지도사 시나리오 - 의뢰직접요청
 		if (relId2 > 0) {
 			Map<String, Object> param1 = new HashMap<>();
