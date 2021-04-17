@@ -45,22 +45,4 @@ SET regDate = NOW(),
     `body` = '기타 요청 사항',
     `expertId` = 0,
     `clientId` = 1;
-    
-
-#의뢰인 시나리오(내 요청 접수/거절, 진행단계변경 3-4)
-SELECT COUNT(*) 
-FROM `event`
-WHERE 1
-AND relTypeCode = 'order'
-AND relTypeCode2 = 'client'
-AND relId2 = 1 #clientId
-
-#지도사 시나리오(내 지역 신규요청, 장례종료최종확인 5, 의뢰직접요청)
-SELECT COUNT(*)
-FROM `event`
-WHERE 1
-AND relTypeCode = 'order'
-AND relTypeCode2 = 'expert'
-AND relId2 = 4 #expertId
-AND accept = 0
-OR region = '대전광역시'
+   

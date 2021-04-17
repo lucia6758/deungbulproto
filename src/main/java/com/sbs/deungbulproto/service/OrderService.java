@@ -128,6 +128,26 @@ public class OrderService {
 			param2.put("relId", relId);
 			param2.put("relId2", relId2);
 			eventService.deleteEventExceptThisExpert(param2);
+			
+			// 남은 다른 의뢰가 없으면 지도사 work 1로 변경
+			int expertId = Util.getAsInt(canceledOrder.getExpertId(), 0);
+			
+			Map<String, Object> param3 = new HashMap<>();
+			param3.put("clientId", 0);
+			param3.put("expertId", expertId);
+
+			List<Order> orders = orderDao.getForPrintOrdersByMemberId(param3);
+
+			int inProgressOrderCount = 0;
+
+			for (Order getOrder : orders) {
+				if (getOrder.getStepLevel() < 5) {
+					inProgressOrderCount++;
+				}
+			}
+			if (inProgressOrderCount == 0) {
+				expertService.setWork1(expertId);
+			}
 		}
 		// 수락한 전문가가 없었던 경우 해당 지역 이벤트 전체 삭제
 		if (relId2 == 0) {
@@ -265,6 +285,25 @@ public class OrderService {
 		}
 		if (nextStepLevel == 5) {
 			msg = "의뢰가 최종 종료되었습니다. 리뷰를 작성해주세요.";
+
+			// 남은 의뢰가 없으면 지도사 work 1로 변경
+			Map<String, Object> param = new HashMap<>();
+			param.put("clientId", 0);
+			param.put("expertId", changedOrder.getExpertId());
+
+			List<Order> orders = orderDao.getForPrintOrdersByMemberId(param);
+
+			int inProgressOrderCount = 0;
+
+			for (Order order : orders) {
+				if (order.getStepLevel() < 5) {
+					inProgressOrderCount++;
+				}
+			}
+			if (inProgressOrderCount == 0) {
+				expertService.setWork1(changedOrder.getExpertId());
+			}
+
 		}
 
 		return new ResultData("S-1", msg, "id", orderId);
@@ -294,8 +333,8 @@ public class OrderService {
 		param.put("accept", 1);
 		// 기존 이벤트 존재여부 체크
 		Event event = eventService.getEvent(param);
-		// 기존 이벤트가 있고 accept가 0이면 기존 이벤트를 업데이트
-		if (event != null && event.getAccept() == 0) {
+		// 기존 이벤트가 있고 accept가 1이 아니면 기존 이벤트를 업데이트
+		if (event != null && event.getAccept() != 1) {
 			eventService.updateEvent(param);
 		}
 		// 기존 이벤트가 없으면 새 이벤트 생성
@@ -338,9 +377,13 @@ public class OrderService {
 		param.put("accept", 2);
 		// 기존 이벤트 존재여부 체크
 		Event event = eventService.getEvent(param);
-		// 기존 이벤트가 있고 accept가 1이면 기존 이벤트를 업데이트
-		if (event != null && event.getAccept() == 1) {
+		// 기존 이벤트가 있고 accept가 2가 아니면 기존 이벤트를 업데이트
+		if (event != null && event.getAccept() != 2) {
 			eventService.updateEvent(param);
+		}
+		// 기존 이벤트가 없으면 새 이벤트 생성
+		if (event == null) {
+			eventService.addEvent(param);
 		}
 
 		// 지도사 시나리오
@@ -371,8 +414,25 @@ public class OrderService {
 				}
 			}
 		}
-
 		/* 요청이 거절되면 이벤트 생성 또는 이벤트 업데이트 끝 */
+
+		// 남은 다른 의뢰가 없으면 지도사 work 1로 변경
+		Map<String, Object> param3 = new HashMap<>();
+		param3.put("clientId", 0);
+		param3.put("expertId", expertId);
+
+		List<Order> orders = orderDao.getForPrintOrdersByMemberId(param3);
+
+		int inProgressOrderCount = 0;
+
+		for (Order getOrder : orders) {
+			if (getOrder.getStepLevel() < 5) {
+				inProgressOrderCount++;
+			}
+		}
+		if (inProgressOrderCount == 0) {
+			expertService.setWork1(expertId);
+		}
 
 	}
 
