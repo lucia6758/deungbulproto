@@ -104,7 +104,7 @@ SET regDate = NOW(),
     authKey = 'authKey1__2',
     `name` = 'user2',
     `email` = 'user2@user2.com',
-    `cellphoneNo` = 01022222222,
+    `cellphoneNo` = '010-2222-2222',
     `region` = '인천광역시';
 
 INSERT INTO `client`
@@ -154,7 +154,7 @@ SET regDate = NOW(),
     `email` = 'expert1@expert1.com',
     `cellphoneNo` = '010-1111-1111',
     `region` = '대전광역시',
-    `license` = '장례지도사2급',
+    `license` = '장례지도사',
     `career` = '1년',
     `work` = 2;
 
@@ -169,7 +169,7 @@ SET regDate = NOW(),
     `email` = 'expert2@expert2.com',
     `cellphoneNo` = '010-2222-2222',
     `region` = '서울특별시',
-    `license` = '장례지도사자격증',
+    `license` = '장례지도사',
     `career` = '2년',
     `work` = 2;
 
@@ -184,7 +184,7 @@ SET regDate = NOW(),
     `email` = 'expert3@expert3.com',
     `cellphoneNo` = '010-3333-3333',
     `region` = '부산광역시',
-    `license` = '장례지도사자격증',
+    `license` = '장례지도사',
     `career` = '5년',
     `work` = 2;
     
@@ -199,7 +199,7 @@ SET regDate = NOW(),
     `email` = 'expert4@expert4.com',
     `cellphoneNo` = '010-4444-4444',
     `region` = '대전광역시',
-    `license` = '장례지도사자격증',
+    `license` = '장례지도사',
     `career` = '8년',
     `work` = 2;
    
@@ -282,4 +282,26 @@ SET regDate = NOW(),
     authKey = 'authKey5__1',
     `name` = 'adm1',
     `email` = 'adm1@adm1.com',
-    `cellphoneNo` = '01011111111';
+    `cellphoneNo` = '010-1111-1111';
+
+
+#이벤트
+CREATE TABLE `event`(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME DEFAULT NULL, # 작성날짜
+    updateDate DATETIME DEFAULT NULL, # 갱신날짜
+    `relTypeCode` CHAR(20) NOT NULL, #order
+    `relTypeCode2` CHAR(20) NOT NULL, #client or expert
+    relId INT(10) UNSIGNED NOT NULL, #orderId
+    relId2 INT(10) UNSIGNED NOT NULL, #clientId or expertId
+    `accept` SMALLINT(2) UNSIGNED NOT NULL, #for client
+    stepLevel SMALLINT(2) UNSIGNED NOT NULL, #3~4 for client / 5 #for expert
+    directOrder SMALLINT(2) UNSIGNED NOT NULL, #for expert
+    cancelOrder SMALLINT(2) UNSIGNED NOT NULL, #for expert
+    `region` CHAR(50) NOT NULL, #for expert
+    `alertCheckStatus` SMALLINT(2) UNSIGNED DEFAULT 0 NOT NULL COMMENT '(0=확인안함 1=확인함)'
+);
+
+# 고속 검색을 위해서 인덱스 걸기
+ALTER TABLE `event` ADD KEY (relTypeCode, relTypeCode2, relId, relId2);
+ALTER TABLE `event` ADD KEY (relTypeCode, relTypeCode2, relId2); 

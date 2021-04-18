@@ -45,6 +45,7 @@
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
 		WHERE 1
+		AND E.acknowledgment_step = 2
 		GROUP BY E.id
 		ORDER BY E.id DESC
 	</select>
@@ -58,6 +59,7 @@
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
 		WHERE 1
+		AND E.acknowledgment_step = 2
 		AND E.region = #{region}
 		GROUP BY E.id
 		ORDER BY
@@ -104,6 +106,7 @@
 		FROM
 		`expert`
 		WHERE `work` = 1
+		AND acknowledgment_step = 2
 		AND region = #{region}
 	</select>
 

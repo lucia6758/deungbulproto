@@ -172,7 +172,6 @@ public class UsrOrderController {
 	@ResponseBody
 	public ResultData doChangeStepLevel(int id, int stepLevel) {
 
-		System.out.println(stepLevel);
 		int nextStepLevel = stepLevel + 1;
 
 		return orderService.changeStepLevel(id, nextStepLevel);
@@ -193,7 +192,6 @@ public class UsrOrderController {
 		}
 
 		orderService.orderReject(orderId, expertId);
-		expertService.setWork1(expertId);
 
 		return new ResultData("S-1", "의뢰를 포기하였습니다.", "id", orderId);
 	}
