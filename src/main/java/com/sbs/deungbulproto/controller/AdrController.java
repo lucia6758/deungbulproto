@@ -1,7 +1,7 @@
 package com.sbs.deungbulproto.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -12,16 +12,17 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sbs.deungbulproto.dto.Adm;
-import com.sbs.deungbulproto.dto.Client;
-import com.sbs.deungbulproto.dto.Expert;
 import com.sbs.deungbulproto.service.AdmMemberService;
 import com.sbs.deungbulproto.service.AdrPushNotificationService;
 import com.sbs.deungbulproto.service.AdrPushPeriodicNotificationService;
@@ -45,22 +46,26 @@ public class AdrController {
     @RequestMapping(value = "/adr/push/send", produces="text/plain; charset=UTF-8;")
     public @ResponseBody ResponseEntity<String> send(String pushTitle, String pushBody, String[] args) throws JSONException, InterruptedException  {
     	if( pushTitle.length() == 0 ) {
-    		pushTitle = "default pushTitle";
+    		pushTitle = "기본 제목";
     	}
     	if( pushBody.length() == 0 ) {
-    		pushBody = "default pushBody";
+    		pushBody = "기본 내용";
     	}
     	if(args.length == 0) {
     		args[0] = "fvToz4zBT9-MWXZUp2SaB_:APA91bHsuE9-HmSoS34xXq7VIRrVRAxCtJXd5-02bB5Xl18mSUAO2bklTLHWQCTY8bIKSNy2Zc31kYnRqe6QogFEVa5wka0skquAY1GFiiRveI6AtgYQbEV7ErE4naJZ528Lx9FRa_V6";
     	}
     	
-        String notifications = AdrPushPeriodicNotificationService.PeriodicNotificationJson(pushTitle, pushBody, args);
+        String notifications = AdrPushPeriodicNotificationService.PeriodicNotificationJson(pushTitle, pushBody, args);   
+        
+        HttpHeaders headers = new HttpHeaders(); 
+        Charset utf8 = Charset.forName("UTF-8"); 
+        MediaType mediaType = new MediaType("application", "json", utf8); 
+        headers.setContentType(mediaType);
 
-        HttpEntity<String> request = new HttpEntity<>(notifications);
+        HttpEntity<String> request = new HttpEntity<>(notifications, headers);
 
         CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
         CompletableFuture.allOf(pushNotification).join();
-
         try{
             String firebaseResponse = pushNotification.get();
             return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
