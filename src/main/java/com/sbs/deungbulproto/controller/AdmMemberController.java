@@ -43,9 +43,9 @@ public class AdmMemberController extends BaseController {
 			return Util.msgAndBack("loginId를 입력해주세요.");
 		}
 
-		Adm existingMember = admMemberService.getMemberByLoginId(loginId);
+		Adm existingAdm = admMemberService.getMemberByLoginId(loginId);
 
-		if (existingMember == null) {
+		if (existingAdm == null) {
 			return Util.msgAndBack("존재하지 않는 아이디 입니다.");
 		}
 
@@ -53,17 +53,17 @@ public class AdmMemberController extends BaseController {
 			return Util.msgAndBack("비밀번호를 입력해주세요.");
 		}
 
-		if (existingMember.getLoginPw().equals(loginPw) == false) {
+		if (existingAdm.getLoginPw().equals(loginPw) == false) {
 			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
 
-		if (admMemberService.isAdmin(existingMember) == false) {
+		if (admMemberService.isAdmin(existingAdm) == false) {
 			return Util.msgAndBack("관리자만 접근할 수 있는 페이지 입니다.");
 		}
 
-		session.setAttribute("loginedMemberId", existingMember.getId());
+		session.setAttribute("loginedMemberId", existingAdm.getId());
 
-		String msg = String.format("%s님 환영합니다.", existingMember.getName());
+		String msg = String.format("%s님 환영합니다.", existingAdm.getName());
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
 
@@ -98,34 +98,40 @@ public class AdmMemberController extends BaseController {
 
 	@RequestMapping("/adm/member/doJoin")
 	@ResponseBody
-	public ResultData doJoin(@RequestParam Map<String, Object> param) {
+	public String doJoin(@RequestParam Map<String, Object> param) {
 		if (param.get("loginId") == null) {
-			return new ResultData("F-1", "loginId를 입력해주세요.");
+			return Util.msgAndBack("아이디를 입력해주세요.");
 		}
 
 		Adm existingAdm = admMemberService.getMemberByLoginId((String) param.get("loginId"));
 
 		if (existingAdm != null) {
-			return new ResultData("F-2", String.format("%s (은)는 이미 사용중인 로그인아이디 입니다.", param.get("loginId")));
+			return Util.msgAndBack("이미 사용중인 로그인아이디 입니다.");
 		}
 
 		if (param.get("loginPw") == null) {
-			return new ResultData("F-1", "loginPw를 입력해주세요.");
+			return Util.msgAndBack("비밀번호를 입력해주세요.");
 		}
 
 		if (param.get("name") == null) {
-			return new ResultData("F-1", "name을 입력해주세요.");
+			return Util.msgAndBack("이름을 입력해주세요.");
 		}
 
 		if (param.get("cellphoneNo") == null) {
-			return new ResultData("F-1", "cellphoneNo를 입력해주세요.");
+			return Util.msgAndBack("핸드폰번호를 입력해주세요.");
 		}
 
 		if (param.get("email") == null) {
-			return new ResultData("F-1", "email을 입력해주세요.");
+			return Util.msgAndBack("이메일주소를 입력해주세요.");
 		}
 
-		return admMemberService.join(param);
+		admMemberService.join(param);
+
+		String msg = String.format("%s님 환영합니다.", param.get("name"));
+
+		String redirectUrl = Util.ifEmpty((String) param.get("redirectUrl"), "../member/login");
+
+		return Util.msgAndReplace(msg, redirectUrl);
 	}
 
 	@RequestMapping("/adm/member/admByAuthKey")

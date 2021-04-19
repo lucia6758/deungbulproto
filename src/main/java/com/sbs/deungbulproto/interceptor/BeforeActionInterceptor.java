@@ -25,7 +25,7 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 	@Autowired
 	private ExpertService expertService;
 	@Autowired
-	private AdmMemberService admService;
+	private AdmMemberService admMemberService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -82,7 +82,7 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 					loginedExpertId = loginedExpert.getId();
 				}
 			} else if (authKies[0].contains("5")) {
-				loginedAdm = admService.getAdmByAuthKey(authKey);
+				loginedAdm = admMemberService.getAdmByAuthKey(authKey);
 				if (loginedAdm == null) {
 					request.setAttribute("authKeyStatus", "invalid");
 				} else {
@@ -103,15 +103,16 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 				loginedExpert = expertService.getExpert(loginedExpertId);
 			} else if (session.getAttribute("loginedAdmId") != null) {
 				loginedAdmId = (int) session.getAttribute("loginedAdmId");
-				loginedAdm = admService.getAdm(loginedAdmId);
+				loginedAdm = admMemberService.getAdm(loginedAdmId);
 			}
 		}
 
 		boolean isLogined = false;
 		boolean isAdmin = false;
 
-		if (loginedClient != null || loginedExpert != null || loginedAdm != null) {
+		if (loginedAdm != null) {
 			isLogined = true;
+			isAdmin = admMemberService.isAdmin(loginedAdm);
 		}
 
 		request.setAttribute("loginedClientId", loginedClientId);
