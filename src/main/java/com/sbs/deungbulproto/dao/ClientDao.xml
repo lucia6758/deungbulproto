@@ -98,6 +98,9 @@
 			<if test="region != null">
 				, `region` = #{region}
 			</if>
+			<if test="deviceIdToken != null">
+				deviceIdToken = #{deviceIdToken},
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>

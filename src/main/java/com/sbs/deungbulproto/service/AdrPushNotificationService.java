@@ -15,7 +15,7 @@ import com.sbs.deungbulproto.config.HeaderRequestInterceptor;
 
 @Service
 public class AdrPushNotificationService {
-    private static final String firebase_server_key="AAAAc5C7L-c:APA91bF69g1AmO6g1ywI5zb6T5xRc_P8abJvMHlDSFyGfUkYo_n3P4PWEkbSOg64CuhJeCEiuw_TsQWlpzpk-odJgg7oP8ywlEbkKPEDXQaz2kgb2R98HOBSv4OGxMpraEERPWaTTLuw";
+    private static final String firebase_server_key="AAAAvL2s8E4:APA91bG8FhlryD9s5QECsC_tH0GefxSJxth5Syjbxp2n3eOAU2bOnTp0cUf7fQ7kgStrTQOqlaXDIPFykPCgTW7G34tiIIm4CQ60eFVn4q5WmhcTX0BpglZy9jfqM1DOpGAeVSB2hb_I";
     private static final String firebase_api_url="https://fcm.googleapis.com/fcm/send";
 
     @Async
