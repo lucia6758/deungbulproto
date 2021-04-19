@@ -114,6 +114,10 @@ public class OrderService {
 			param.put("cancelOrder", 1);
 			// 기존 이벤트 존재여부 체크
 			Event event = eventService.getEvent(param);
+			// 기존 이벤트가 있고 directOrder == 1이지만 확인을 안했으면 이벤트를 DB에서 삭제(알림x)
+			if (event != null && event.getDirectOrder() == 1 && event.getAlertCheckStatus() == 0) {
+				eventService.deleteEvent(param);
+			}
 			// 기존 이벤트가 있고 cancelOrder가 0이면 기존 이벤트를 업데이트
 			if (event != null && event.getCancelOrder() == 0) {
 				eventService.updateEvent(param);
@@ -284,7 +288,7 @@ public class OrderService {
 			msg = "장례종료 확인 요청을 보냈습니다.";
 		}
 		if (nextStepLevel == 5) {
-			msg = "의뢰가 최종 종료되었습니다. 리뷰를 작성해주세요.";
+			msg = "의뢰가 최종 종료되었습니다. 후기를 작성해주세요.";
 
 			// 남은 의뢰가 없으면 지도사 work 1로 변경
 			Map<String, Object> param = new HashMap<>();
