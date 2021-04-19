@@ -128,10 +128,10 @@ public class OrderService {
 			param2.put("relId", relId);
 			param2.put("relId2", relId2);
 			eventService.deleteEventExceptThisExpert(param2);
-			
+
 			// 남은 다른 의뢰가 없으면 지도사 work 1로 변경
 			int expertId = Util.getAsInt(canceledOrder.getExpertId(), 0);
-			
+
 			Map<String, Object> param3 = new HashMap<>();
 			param3.put("clientId", 0);
 			param3.put("expertId", expertId);

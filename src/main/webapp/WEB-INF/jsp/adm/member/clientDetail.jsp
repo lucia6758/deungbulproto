@@ -36,11 +36,11 @@
 					<div class="w-full md:w-3/12 md:mx-2">
 						<div class="bg-white p-3 border-t-4 border-green-400">
 							<div class="image overflow-hidden">
-								<c:if test="${expert.extra__thumbImg != null}">
+								<c:if test="${client.extra__thumbImg != null}">
 									<img class="h-auto w-full mx-auto"
-										src="${expert.extra__thumbImg}" alt="" />
+										src="${client.extra__thumbImg}" alt="" />
 								</c:if>
-								<c:if test="${expert.extra__thumbImg == null}">
+								<c:if test="${client.extra__thumbImg == null}">
 									<img class="h-auto w-full mx-auto"
 										src="https://via.placeholder.com/500x500?text=NoImage" alt="" />
 								</c:if>
@@ -49,9 +49,7 @@
 						</div>
 						<div class="my-4"></div>
 					</div>
-
 					<div class="w-full md:w-9/12 mx-2 h-64">
-
 						<div class="bg-white p-3 shadow-sm rounded-sm">
 							<div
 								class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
@@ -69,66 +67,27 @@
 								<div class="text-sm">
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">가입날짜</div>
-										<div class="px-4 py-2">${expert.regDate}</div>
+										<div class="px-4 py-2">${client.regDate}</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">이름</div>
-										<div class="px-4 py-2">${expert.name}</div>
+										<div class="px-4 py-2">${client.name}</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">아이디</div>
-										<div class="px-4 py-2">${expert.loginId}</div>
+										<div class="px-4 py-2">${client.loginId}</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">지역</div>
-										<div class="px-4 py-2">${expert.region}</div>
+										<div class="px-4 py-2">${client.region}</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">전화번호</div>
-										<div class="px-4 py-2">${expert.cellphoneNo}</div>
+										<div class="px-4 py-2">${client.cellphoneNo}</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">이메일주소</div>
-										<div class="px-4 py-2">${expert.email}</div>
-									</div>
-									<div class="grid grid-cols-2">
-										<div class="px-4 py-2 font-semibold">경력</div>
-										<div class="px-4 py-2">${expert.career}</div>
-									</div>
-									<div class="grid grid-cols-2">
-										<div class="px-4 py-2 font-semibold">자격증</div>
-										<div class="px-4 py-2">${expert.license}</div>
-									</div>
-									<div class="grid grid-cols-2">
-										<div class="px-4 py-2 font-semibold">인증 상태</div>
-										<div class="px-4 py-2">${expert.acknowledgment_step}</div>
-									</div>
-									<div class="grid grid-rows-2">
-										<div class="px-4 py-2 font-semibold">인증 파일</div>
-										<div class="px-4 py-2">${expert.extra__licenseImg}</div>
-									</div>
-									<div class="grid grid-cols-2">
-										<div class="px-4 py-2 font-semibold">인증 확인</div>
-										<div class="grid grid-cols-2 px-4 py-2">
-											<c:if test="${expert.acknowledgment_step==1}">
-												<form action="doConfirmExpert" method="POST">
-													<input type="hidden" name="confirm" value="Y" />
-													<input type="hidden" name="expertId" value="${expert.id}" />
-													<button
-														class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-700 rounded shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none"
-														type="submit"
-														onclick="if ( !confirm('전문가 인증을 승인하시겠습니까?') ) return false;">승인</button>
-												</form>
-											</c:if>
-											<form action="doConfirmExpert" method="POST">
-												<input type="hidden" name="confirm" value="N" />
-												<input type="hidden" name="expertId" value="${expert.id}" />
-												<button
-													class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-red-500 rounded shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none"
-													type="submit"
-													onclick="if ( !confirm('전문가 인증을 거절/취소 하시겠습니까?') ) return false;">거절/취소</button>
-											</form>
-										</div>
+										<div class="px-4 py-2">${client.email}</div>
 									</div>
 								</div>
 							</div>
