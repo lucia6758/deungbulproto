@@ -114,6 +114,9 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			isLogined = true;
 			isAdmin = admMemberService.isAdmin(loginedAdm);
 		}
+		if (loginedClient != null || loginedExpert != null) {
+			isLogined = true;
+		}
 
 		request.setAttribute("loginedClientId", loginedClientId);
 		request.setAttribute("loginedExpertId", loginedExpertId);
