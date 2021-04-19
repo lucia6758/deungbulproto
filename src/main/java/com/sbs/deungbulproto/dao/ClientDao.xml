@@ -99,7 +99,7 @@
 				, `region` = #{region}
 			</if>
 			<if test="deviceIdToken != null">
-				deviceIdToken = #{deviceIdToken},
+				, deviceIdToken = #{deviceIdToken}
 			</if>
 		</set>
 		WHERE id = #{id}

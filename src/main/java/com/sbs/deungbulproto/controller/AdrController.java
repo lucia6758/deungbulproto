@@ -92,7 +92,7 @@ public class AdrController {
 				param.put("id", loginedClientId);
 				param.put("deviceIdToken", deviceIdToken);
 				
-				admService.modifyMember(param);
+				clientService.modifyClient(param);
 			}
 			
 		} else if (session.getAttribute("loginedExpertId") != null) {
@@ -103,7 +103,7 @@ public class AdrController {
 				param.put("id", loginedExpertId);
 				param.put("deviceIdToken", deviceIdToken);
 				
-				admService.modifyMember(param);
+				expertService.modifyExpert(param);
 			}
 			
 		} else if (session.getAttribute("loginedAdmId") != null) {
