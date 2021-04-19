@@ -75,7 +75,8 @@ CREATE TABLE `client` (
     `name` CHAR(30) NOT NULL,
     `email` CHAR(100) NOT NULL,
     `cellphoneNo` CHAR(20) NOT NULL,
-    `region` CHAR(100) NOT NULL #지역
+    `region` CHAR(100) NOT NULL,
+    deviceIdToken CHAR(100) 
 );
 
 # 로그인 ID로 검색했을 때
@@ -133,7 +134,8 @@ CREATE TABLE `expert` (
     `region` CHAR(100) NOT NULL, #지역(시도)
     `license` CHAR(100) NOT NULL,  #자격증
     `career` CHAR(50) NOT NULL,
-    `work` SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=대기중 2=작업중)'
+    `work` SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=대기중 2=작업중)',
+    deviceIdToken CHAR(100) 
 );
 
 # 로그인 ID로 검색했을 때
@@ -270,7 +272,8 @@ CREATE TABLE `adm` (
     authKey CHAR(80) NOT NULL,
     `name` CHAR(30) NOT NULL,
     `email` CHAR(100) NOT NULL,
-    `cellphoneNo` CHAR(20) NOT NULL
+    `cellphoneNo` CHAR(20) NOT NULL,
+    deviceIdToken CHAR(100) 
 );
 
 # 관리자회원 테스트 데이터
