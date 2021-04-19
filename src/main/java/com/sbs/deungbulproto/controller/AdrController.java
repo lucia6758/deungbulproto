@@ -69,57 +69,12 @@ public class AdrController {
     @RequestMapping(value = "/adr/push/receiveDeviceId")
     public @ResponseBody String receive(HttpServletRequest req, HttpSession session) {
     	
-    	String deviceIdTitle = req.getParameter("deviceIdTitle");
-    	String deviceIdToken = req.getParameter("deviceIdToken");
+    	String deviceIdToken = req.getParameter("deviceIdToken"); 	
     	
-    	int loginedClientId;
-    	Client loginedClient;
-    	int loginedExpertId;
-    	Expert loginedExpert;
-    	int loginedAdmId;
-    	Adm loginedAdm;
+    	System.out.println("현재 기기의 deviceId Token = " + deviceIdToken);
+    	session.setAttribute("deviceIdToken", deviceIdToken);
     	
-    	Map<String, Object> param = new HashMap<>();
-
-    	System.out.println(deviceIdTitle);
-    	System.out.println(deviceIdToken);
-
-		if (session.getAttribute("loginedClientId") != null) {
-			loginedClientId = (int) session.getAttribute("loginedClientId");
-			loginedClient = clientService.getClient(loginedClientId);
-			
-			if( !loginedClient.getDeviceIdToken().equals(deviceIdToken) || loginedClient.getDeviceIdToken() == null) {
-				param.put("id", loginedClientId);
-				param.put("deviceIdToken", deviceIdToken);
-				
-				admService.modifyMember(param);
-			}
-			
-		} else if (session.getAttribute("loginedExpertId") != null) {
-			loginedExpertId = (int) session.getAttribute("loginedExpertId");
-			loginedExpert = expertService.getExpert(loginedExpertId);
-			
-			if( !loginedExpert.getDeviceIdToken().equals(deviceIdToken) || loginedExpert.getDeviceIdToken() == null) {
-				param.put("id", loginedExpertId);
-				param.put("deviceIdToken", deviceIdToken);
-				
-				admService.modifyMember(param);
-			}
-			
-		} else if (session.getAttribute("loginedAdmId") != null) {
-			loginedAdmId = (int) session.getAttribute("loginedAdmId");
-			loginedAdm = admService.getAdm(loginedAdmId);
-
-			if( !loginedAdm.getDeviceIdToken().equals(deviceIdToken) || loginedAdm.getDeviceIdToken() == null) {
-				param.put("id", loginedAdmId);
-				param.put("deviceIdToken", deviceIdToken);
-				
-				admService.modifyMember(param);
-			}
-			
-		}
-    	
-    	return "확인2";
+    	return "현재 기기의 deviceId Token = " + deviceIdToken;
     	
     }
     

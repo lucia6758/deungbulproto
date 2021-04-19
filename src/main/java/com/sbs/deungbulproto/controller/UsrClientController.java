@@ -1,5 +1,6 @@
 package com.sbs.deungbulproto.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,18 @@ public class UsrClientController extends BaseController {
 		String msg = String.format("%s님 환영합니다.", existingClient.getName());
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
+		
+		String deviceIdToken = (String) session.getAttribute("deviceIdToken");
+		Map<String, Object> param = new HashMap<>();
+		
+		if(deviceIdToken.length() <= 0) {
+			if( !deviceIdToken.equals( existingClient.getDeviceIdToken() ) ) {
+				param.put("id", existingClient.getId() );
+				param.put("deviceIdToken", deviceIdToken);
+				
+				clientService.modifyClient(param);
+			}
+		}
 
 		return Util.msgAndReplace(msg, redirectUrl);
 	}

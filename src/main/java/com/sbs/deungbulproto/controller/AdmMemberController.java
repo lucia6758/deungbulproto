@@ -1,5 +1,6 @@
 package com.sbs.deungbulproto.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,18 @@ public class AdmMemberController extends BaseController {
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
 
+		String deviceIdToken = (String) session.getAttribute("deviceIdToken");
+		Map<String, Object> param = new HashMap<>();
+		
+		if(deviceIdToken.length() <= 0) {
+			if( !deviceIdToken.equals( existingAdm.getDeviceIdToken() ) ) {
+				param.put("id", existingAdm.getId() );
+				param.put("deviceIdToken", deviceIdToken);
+				
+				admMemberService.modifyMember(param);
+			}
+		}
+		
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
 

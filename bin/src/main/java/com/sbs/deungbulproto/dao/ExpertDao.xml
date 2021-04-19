@@ -45,6 +45,7 @@
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
 		WHERE 1
+		AND E.acknowledgment_step = 2
 		GROUP BY E.id
 		ORDER BY E.id DESC
 	</select>
@@ -58,6 +59,7 @@
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
 		WHERE 1
+		AND E.acknowledgment_step = 2
 		AND E.region = #{region}
 		GROUP BY E.id
 		ORDER BY
@@ -104,6 +106,7 @@
 		FROM
 		`expert`
 		WHERE `work` = 1
+		AND acknowledgment_step = 2
 		AND region = #{region}
 	</select>
 
@@ -152,6 +155,9 @@
 			<if test="career != null">
 				, `career` = #{career}
 			</if>
+			<if test="deviceIdToken != null">
+				deviceIdToken = #{deviceIdToken},
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -178,5 +184,23 @@
 		AND `loginId` = #{loginId}
 		AND `email` = #{email}
 	</select>
+	
+	<update id="confirmExpert">
+		UPDATE `expert`
+		<set>
+			updateDate = NOW(),
+			`acknowledgment_step` = 2
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="rejectExpert">
+		UPDATE `expert`
+		<set>
+			updateDate = NOW(),
+			`acknowledgment_step` = 3
+		</set>
+		WHERE id = #{id}
+	</update>
 	
 </mapper>
