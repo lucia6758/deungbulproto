@@ -25,7 +25,7 @@ public class AdrController {
     @Autowired
     AdrPushNotificationService androidPushNotificationsService;
 
-    @RequestMapping(value = "/adr/push/send", produces="text/plain; charset=UTF-8")
+    @RequestMapping(value = "/adr/push/send", produces="text/plain; charset=UTF-8;")
     public @ResponseBody ResponseEntity<String> send() throws JSONException, InterruptedException  {
         String notifications = AdrPushPeriodicNotificationService.PeriodicNotificationJson();
 
