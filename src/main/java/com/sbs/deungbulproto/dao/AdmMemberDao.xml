@@ -7,17 +7,19 @@
 
 	<insert id="join" useGeneratedKeys="true" keyProperty="id">
 		INSERT
-		INTO adm
-		SET regDate = NOW(),
-		updateDate = NOW(),
-		loginId =
-		#{loginId},
-		loginPw = #{loginPw},
-		`name` = #{name},
-		cellphoneNo = #{cellphoneNo},
-		email = #{email},
-		authKey =
-		CONCAT("authKey5__", UUID(), "__", RAND())
+		INTO `adm`
+		<set>
+			regDate = NOW(),
+			updateDate = NOW(),
+			loginId =
+			#{loginId},
+			loginPw = #{loginPw},
+			`name` = #{name},
+			cellphoneNo = #{cellphoneNo},
+			email = #{email},
+			authKey =
+			CONCAT("authKey5__", UUID(), "__", RAND())
+		</set>
 	</insert>
 
 	<select id="getMember" resultType="Adm">

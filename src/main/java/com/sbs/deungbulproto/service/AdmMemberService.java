@@ -33,8 +33,11 @@ public class AdmMemberService {
 		return new ResultData("S-1", "회원정보가 수정되었습니다.");
 	}
 
-	public static boolean isAdmin(int actorId) {
-		return actorId == 1;
+	public boolean isAdmin(int actorId) {
+		if(getAdm(actorId) != null) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isAdmin(Adm actor) {
