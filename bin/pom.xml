@@ -18,40 +18,7 @@
 		<java.version>11</java.version>
 	</properties>
 		<dependencies>
-		
-		<!-- 안드로이드 푸시용 의존성 시작 -->
-		
-		<!--https://mvnrepository.com/artifact/org.json/json-->
-	   <dependency>
-	      <groupId>org.json</groupId>
-	      <artifactId>json</artifactId>
-	      <version>20160810</version>
-	   </dependency>
-	   
-		<!--logger-->
-	   <dependency>
-	      <groupId>org.slf4j</groupId>
-	      <artifactId>slf4j-api</artifactId>
-	      <version>1.7.25</version>
-	   </dependency>
-	
-		<!-- 파이어베이스 의존성 -->
-		<dependency>
-		    <groupId>com.google.firebase</groupId>
-		    <artifactId>firebase-admin</artifactId>
-		    <version>6.8.1</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>com.google.auto.value</groupId>
-		    <artifactId>auto-value</artifactId>
-		    <version>1.6.5</version>
-		    <scope>provided</scope>
-		</dependency>
-		
-		<!-- 안드로이드 푸시용 의존성 끝 -->
-		
-		<!-- 알리고(SMS)용 컴포넌트 -->
+				<!-- 알리고(SMS)용 컴포넌트 -->
 		<dependency>
 		    <groupId>org.apache.httpcomponents</groupId>
 		    <artifactId>httpclient</artifactId>
