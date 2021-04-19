@@ -93,15 +93,6 @@
 			return;
 		}
 		
-		form.nickname.value = form.nickname.value.trim();
-		
-		if (form.nickname.value.length == 0) {
-			alert('별명을 입력해주세요.');
-			form.nickname.focus();
-			
-			return;
-		}
-		
 		form.email.value = form.email.value.trim();
 		
 		if (form.email.value.length == 0) {
@@ -128,31 +119,7 @@
 			form.submit();
 			JoinForm__checkAndSubmitDone = true;
 		}
-		function startUpload(onSuccess) {
-			if (!form.file__member__0__common__attachment__1.value) {
-				onSuccess();
-				return;
-			}
-			
-			const formData = new FormData(form);
-			
-			$.ajax({
-				url : '/common/genFile/doUpload',
-				data : formData,
-				processData : false,
-				contentType : false,
-				dataType : "json",
-				type : 'POST',
-				success : onSuccess
-			});
-			
-			// 파일을 업로드 한 후
-			// 기다린다.
-			// 응답을 받는다.
-			// onSuccess를 실행한다.
-		}
 		
-		startUpload(submitForm);
 	}
 	$(function() {
 		$('.inputLoginId').change(function() {
