@@ -43,8 +43,18 @@ public class AdrController {
 	AdmMemberService admService;
 
     @RequestMapping(value = "/adr/push/send", produces="text/plain; charset=UTF-8;")
-    public @ResponseBody ResponseEntity<String> send() throws JSONException, InterruptedException  {
-        String notifications = AdrPushPeriodicNotificationService.PeriodicNotificationJson();
+    public @ResponseBody ResponseEntity<String> send(String pushTitle, String pushBody, String[] args) throws JSONException, InterruptedException  {
+    	if( pushTitle.length() == 0 ) {
+    		pushTitle = "default pushTitle";
+    	}
+    	if( pushBody.length() == 0 ) {
+    		pushBody = "default pushBody";
+    	}
+    	if(args.length == 0) {
+    		args[0] = "fvToz4zBT9-MWXZUp2SaB_:APA91bHsuE9-HmSoS34xXq7VIRrVRAxCtJXd5-02bB5Xl18mSUAO2bklTLHWQCTY8bIKSNy2Zc31kYnRqe6QogFEVa5wka0skquAY1GFiiRveI6AtgYQbEV7ErE4naJZ528Lx9FRa_V6";
+    	}
+    	
+        String notifications = AdrPushPeriodicNotificationService.PeriodicNotificationJson(pushTitle, pushBody, args);
 
         HttpEntity<String> request = new HttpEntity<>(notifications);
 

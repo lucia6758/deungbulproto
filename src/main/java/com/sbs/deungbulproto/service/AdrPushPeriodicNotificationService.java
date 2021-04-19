@@ -10,19 +10,17 @@ import org.json.JSONObject;
 
 public class AdrPushPeriodicNotificationService {
 
-    public static String PeriodicNotificationJson() throws JSONException {
+    public static String PeriodicNotificationJson(String pushTitle, String pushBody, String[] args) throws JSONException {
         LocalDate localDate = LocalDate.now();
 
-        String sampleData[] = {
-        		"fvToz4zBT9-MWXZUp2SaB_:APA91bHsuE9-HmSoS34xXq7VIRrVRAxCtJXd5-02bB5Xl18mSUAO2bklTLHWQCTY8bIKSNy2Zc31kYnRqe6QogFEVa5wka0skquAY1GFiiRveI6AtgYQbEV7ErE4naJZ528Lx9FRa_V6"
-        		};
+        String receiveMembers[] = args;
 
         JSONObject body = new JSONObject();
 
         List<String> tokenlist = new ArrayList<String>();
 
-        for(int i=0; i<sampleData.length; i++){
-            tokenlist.add(sampleData[i]);
+        for(int i=0; i<receiveMembers.length; i++){
+            tokenlist.add(receiveMembers[i]);
         }
 
         JSONArray array = new JSONArray();
@@ -35,8 +33,8 @@ public class AdrPushPeriodicNotificationService {
 
         JSONObject notification = new JSONObject();
         
-        notification.put("title","안녕!");
-        notification.put("body","오늘은 "+localDate.getDayOfWeek().name()+" 입니다!");
+        notification.put("title", pushTitle);
+        notification.put("body", pushBody);
         
         body.put("notification", notification);        
 
