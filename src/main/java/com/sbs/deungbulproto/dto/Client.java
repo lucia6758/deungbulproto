@@ -25,4 +25,5 @@ public class Client {
 
 	private String extra__thumbImg;
 
+	private String deviceIdToken;
 }

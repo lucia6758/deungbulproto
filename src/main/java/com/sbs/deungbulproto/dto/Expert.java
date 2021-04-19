@@ -30,6 +30,8 @@ public class Expert {
 	private String license;
 	private String career;
 	private int work;
+	
+	private String deviceIdToken;
 
 	private String extra__thumbImg;
 	private String extra__licenseImg;
