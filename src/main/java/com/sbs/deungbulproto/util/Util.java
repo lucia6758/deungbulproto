@@ -128,6 +128,8 @@ public class Util {
 
 			Aligo__send__ResponseBody rb = Util.getObjectFromJsonString(result, Aligo__send__ResponseBody.class);
 
+			
+			System.out.println("1111111111111111 : " + result);
 			return rb;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,6 +137,8 @@ public class Util {
 			rb.message = e.getLocalizedMessage();
 			rb.msg_id = "-1";
 			rb.error_cnt = 1;
+			
+			System.out.println("222222222222222222222 : " + rb);
 			return rb;
 		}
 	}

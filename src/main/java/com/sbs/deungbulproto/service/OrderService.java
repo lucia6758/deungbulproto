@@ -113,8 +113,6 @@ public class OrderService {
 			if (experts != null && experts.size() > 0) {
 				expertsDeviceIdToken = new String[experts.size()];
 				for (int i = 0; i < experts.size(); i++) {
-					// Util.sendSms("0100000000", expert.getCellphoneNo(), "장례지도사 의뢰가 올라왔습니다.
-					// 링크:~~");
 					expertsDeviceIdToken[i] = experts.get(i).getDeviceIdToken();
 				}
 			}

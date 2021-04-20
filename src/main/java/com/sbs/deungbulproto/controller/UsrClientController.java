@@ -120,22 +120,6 @@ public class UsrClientController extends BaseController {
 		return clientService.join(param);
 	}
 
-	@GetMapping("/usr/client/doDelete")
-	@ResponseBody
-	public ResultData doDelete(HttpServletRequest req, int id) {
-
-		Client client = clientService.getForPrintClient(id);
-
-		if (client == null) {
-			return new ResultData("F-1", "로그인 후 이용가능합니다.");
-		}
-
-		clientService.delete(id);
-		req.setAttribute("name", client.getName());
-
-		return new ResultData("S-1", "성공", "body", client.getName());
-	}
-
 	@GetMapping("/usr/client/clientByAuthKey")
 	@ResponseBody
 	public ResultData showMemberByAuthKey(String authKey) {
@@ -200,5 +184,55 @@ public class UsrClientController extends BaseController {
 
 		return new ResultData("S-1", "성공", "client", client);
 	}
+	
+	@PostMapping("/usr/client/doFindLoginId")
+	@ResponseBody
+	public ResultData doFindLoginId(@RequestParam Map<String, Object> param) {
+
+		String name = (String) param.get("name");
+		if (Util.isEmpty(name)) {
+			return new ResultData("F-1", "name을 입력해주세요.");
+		}
+
+		String email = (String) param.get("email");
+		if (Util.isEmpty(email)) {
+			return new ResultData("F-1", "email을 입력해주세요.");
+		}
+
+		return clientService.findLoginIdByNameAndEmail(param);
+	}
+
+	@PostMapping("/usr/client/doFindLoginPw")
+	@ResponseBody
+	public ResultData doFindLoginPw(@RequestParam Map<String, Object> param) {
+
+		String loginId = (String) param.get("loginId");
+		if (Util.isEmpty(loginId)) {
+			return new ResultData("F-1", "loginId를 입력해주세요.");
+		}
+
+		String email = (String) param.get("email");
+		if (Util.isEmpty(email)) {
+			return new ResultData("F-1", "email을 입력해주세요.");
+		}
+
+		return clientService.getClientByLoginIdAndEmail(param);
+	}
+
+	@GetMapping("/usr/client/doDelete")
+	@ResponseBody
+	public ResultData doDelete(int id) {
+
+		Client client = clientService.getForPrintClient(id);
+
+		if (client == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+		}
+
+		clientService.delete(id);
+
+		return new ResultData("S-1", "성공", "name", client.getName());
+	}
+	
 
 }

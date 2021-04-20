@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbs.deungbulproto.container.Container;
+import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Expert;
 import com.sbs.deungbulproto.dto.ResultData;
 import com.sbs.deungbulproto.service.ExpertService;
@@ -89,22 +90,6 @@ public class UsrExpertController extends BaseController {
 		}
 
 		return expertService.join(param);
-	}
-
-	@GetMapping("/usr/expert/doDelete")
-	@ResponseBody
-	public ResultData doDelete(HttpServletRequest req, int id) {
-
-		Expert expert = expertService.getForPrintExpert(id);
-
-		if (expert == null) {
-			return new ResultData("F-1", "로그인 후 이용가능합니다.");
-		}
-
-		expertService.delete(id);
-		req.setAttribute("name", expert.getName());
-
-		return new ResultData("S-1", "성공", "body", expert.getName());
 	}
 
 	@GetMapping("/usr/expert/expertByAuthKey")
@@ -295,6 +280,21 @@ public class UsrExpertController extends BaseController {
 		}
 
 		return expertService.getExpertByLoginIdAndEmail(param);
+	}
+
+	@GetMapping("/usr/expert/doDelete")
+	@ResponseBody
+	public ResultData doDelete(int id) {
+
+		Expert expert = expertService.getForPrintExpert(id);
+
+		if (expert == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+		}
+
+		expertService.delete(id);
+
+		return new ResultData("S-1", "성공", "name", expert.getName());
 	}
 
 }
