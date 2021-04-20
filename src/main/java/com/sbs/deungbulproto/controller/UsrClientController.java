@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sbs.deungbulproto.container.Container;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.ResultData;
 import com.sbs.deungbulproto.service.ClientService;
@@ -55,17 +56,6 @@ public class UsrClientController extends BaseController {
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
 		
-		String deviceIdToken = (String) session.getAttribute("deviceIdToken");
-		Map<String, Object> param = new HashMap<>();
-		
-		if(deviceIdToken.length() <= 0) {
-			if( !deviceIdToken.equals( existingClient.getDeviceIdToken() ) ) {
-				param.put("id", existingClient.getId() );
-				param.put("deviceIdToken", deviceIdToken);
-				
-				clientService.modifyClient(param);
-			}
-		}
 
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
@@ -181,6 +171,18 @@ public class UsrClientController extends BaseController {
 
 		if (existingClient.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
+		}
+		
+		String deviceIdToken = (String) Container.session.deviceIdToken;
+		Map<String, Object> param = new HashMap<>();
+		
+		if(deviceIdToken.length() <= 0) {
+			if( !deviceIdToken.equals( existingClient.getDeviceIdToken() ) ) {
+				param.put("id", existingClient.getId() );
+				param.put("deviceIdToken", deviceIdToken);
+				
+				clientService.modifyClient(param);
+			}
 		}
 
 		return new ResultData("S-1", String.format("%s님 반갑습니다.", existingClient.getName()), "authKey",

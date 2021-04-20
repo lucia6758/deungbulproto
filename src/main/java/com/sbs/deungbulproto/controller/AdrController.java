@@ -47,7 +47,7 @@ public class AdrController {
     		pushTitle = "기본 제목";
     	}
     	if( pushBody.length() == 0 ) {
-    		pushBody = "기본 내용";
+    		pushBody = "";
     	}
     	if(args.length == 0) {
     		args[0] = "fvToz4zBT9-MWXZUp2SaB_:APA91bHsuE9-HmSoS34xXq7VIRrVRAxCtJXd5-02bB5Xl18mSUAO2bklTLHWQCTY8bIKSNy2Zc31kYnRqe6QogFEVa5wka0skquAY1GFiiRveI6AtgYQbEV7ErE4naJZ528Lx9FRa_V6";
