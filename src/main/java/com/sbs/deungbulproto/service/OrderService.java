@@ -1,12 +1,15 @@
 package com.sbs.deungbulproto.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sbs.deungbulproto.controller.AdrController;
 import com.sbs.deungbulproto.dao.OrderDao;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Event;
@@ -23,6 +26,9 @@ public class OrderService {
 	private OrderDao orderDao;
 	@Autowired
 	private ExpertService expertService;
+	@Autowired
+	private AdrController adrController;
+	
 
 	public Order getOrder(int id) {
 		return orderDao.getOrder(id);
@@ -39,9 +45,26 @@ public class OrderService {
 		String region = (String) param.get("region");
 
 		List<Expert> experts = expertService.getExpertsForSendSms(region);
-		for (Expert expert : experts) {
-			Util.sendSms("0100000000", expert.getCellphoneNo(), "장례지도사 의뢰가 올라왔습니다. 링크:~~");
+		
+		// 푸시 발송 로직		
+		String[] expertsDeviceIdToken = null;
+		
+		if(experts != null && experts.size() > 0) {
+			expertsDeviceIdToken = new String[experts.size()]; 
+			for (int i = 0; i < experts.size(); i ++) {
+				// Util.sendSms("0100000000", expert.getCellphoneNo(), "장례지도사 의뢰가 올라왔습니다. 링크:~~");
+				expertsDeviceIdToken[i] = experts.get(i).getDeviceIdToken();
+			}
 		}
+		try {
+			adrController.send("장례지도사 의뢰가 올라왔습니다.", "Link : ", expertsDeviceIdToken);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		// 푸시 발송 로직 끝
 
 		/* 의뢰가 들어오면 이벤트 생성 또는 업데이트 시작 */
 		String relTypeCode2 = "expert";
