@@ -69,7 +69,6 @@ public class AdmMemberController extends BaseController {
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
 
-		
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
 
@@ -173,15 +172,16 @@ public class AdmMemberController extends BaseController {
 		if (existingAdm.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
-		
+
+		// 회원의 디바이스 아이디 토큰 업데이트
 		String deviceIdToken = (String) Container.session.deviceIdToken;
 		Map<String, Object> param = new HashMap<>();
-		
-		if(deviceIdToken.length() <= 0) {
-			if( !deviceIdToken.equals( existingAdm.getDeviceIdToken() ) ) {
-				param.put("id", existingAdm.getId() );
+
+		if (deviceIdToken.length() > 0) {
+			if (!deviceIdToken.equals(existingAdm.getDeviceIdToken())) {
+				param.put("id", existingAdm.getId());
 				param.put("deviceIdToken", deviceIdToken);
-				
+
 				admMemberService.modifyMember(param);
 			}
 		}

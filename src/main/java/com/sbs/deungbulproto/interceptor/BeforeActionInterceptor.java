@@ -105,9 +105,6 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 				loginedAdmId = (int) session.getAttribute("loginedAdmId");
 				loginedAdm = admMemberService.getAdm(loginedAdmId);
 			}
-			
-			
-			System.out.println("klajsd;ljska : " + session.getAttribute("deviceIdToken"));
 		}
 
 		boolean isLogined = false;

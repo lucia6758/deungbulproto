@@ -173,10 +173,11 @@ public class UsrClientController extends BaseController {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 		
+		// 회원의 디바이스 아이디 토큰 업데이트	
 		String deviceIdToken = (String) Container.session.deviceIdToken;
 		Map<String, Object> param = new HashMap<>();
 		
-		if(deviceIdToken.length() <= 0) {
+		if(deviceIdToken.length() > 0) {
 			if( !deviceIdToken.equals( existingClient.getDeviceIdToken() ) ) {
 				param.put("id", existingClient.getId() );
 				param.put("deviceIdToken", deviceIdToken);

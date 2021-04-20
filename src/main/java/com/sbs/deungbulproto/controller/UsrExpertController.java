@@ -154,15 +154,13 @@ public class UsrExpertController extends BaseController {
 		}
 		
 		// 회원의 디바이스 아이디 토큰 업데이트
-		 		
-		System.out.println(Container.session.deviceIdToken);
-	
+		String deviceIdToken = (String) Container.session.deviceIdToken;
 		Map<String, Object> param = new HashMap<>();
 		
-		if(Container.session.deviceIdToken.length() > 0) {
-			if( !Container.session.deviceIdToken.equals( existingExpert.getDeviceIdToken() ) ) {
+		if(deviceIdToken.length() > 0) {
+			if( !deviceIdToken.equals( existingExpert.getDeviceIdToken() ) ) {
 				param.put("id", existingExpert.getId() );
-				param.put("deviceIdToken", Container.session.deviceIdToken);
+				param.put("deviceIdToken", deviceIdToken);
 				
 				expertService.modifyExpert(param);
 			}
