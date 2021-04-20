@@ -1,7 +1,7 @@
 package com.sbs.deungbulproto.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -12,16 +12,17 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sbs.deungbulproto.dto.Adm;
-import com.sbs.deungbulproto.dto.Client;
-import com.sbs.deungbulproto.dto.Expert;
 import com.sbs.deungbulproto.service.AdmMemberService;
 import com.sbs.deungbulproto.service.AdrPushNotificationService;
 import com.sbs.deungbulproto.service.AdrPushPeriodicNotificationService;
@@ -43,14 +44,28 @@ public class AdrController {
 	AdmMemberService admService;
 
     @RequestMapping(value = "/adr/push/send", produces="text/plain; charset=UTF-8;")
-    public @ResponseBody ResponseEntity<String> send() throws JSONException, InterruptedException  {
-        String notifications = AdrPushPeriodicNotificationService.PeriodicNotificationJson();
+    public @ResponseBody ResponseEntity<String> send(String pushTitle, String pushBody, String[] args) throws JSONException, InterruptedException  {
+    	if( pushTitle.length() == 0 ) {
+    		pushTitle = "기본 제목";
+    	}
+    	if( pushBody.length() == 0 ) {
+    		pushBody = "기본 내용";
+    	}
+    	if(args.length == 0) {
+    		args[0] = "fvToz4zBT9-MWXZUp2SaB_:APA91bHsuE9-HmSoS34xXq7VIRrVRAxCtJXd5-02bB5Xl18mSUAO2bklTLHWQCTY8bIKSNy2Zc31kYnRqe6QogFEVa5wka0skquAY1GFiiRveI6AtgYQbEV7ErE4naJZ528Lx9FRa_V6";
+    	}
+    	
+        String notifications = AdrPushPeriodicNotificationService.PeriodicNotificationJson(pushTitle, pushBody, args);   
+        
+        HttpHeaders headers = new HttpHeaders(); 
+        Charset utf8 = Charset.forName("UTF-8"); 
+        MediaType mediaType = new MediaType("application", "json", utf8); 
+        headers.setContentType(mediaType);
 
-        HttpEntity<String> request = new HttpEntity<>(notifications);
+        HttpEntity<String> request = new HttpEntity<>(notifications, headers);
 
         CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
         CompletableFuture.allOf(pushNotification).join();
-
         try{
             String firebaseResponse = pushNotification.get();
             return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
@@ -69,57 +84,12 @@ public class AdrController {
     @RequestMapping(value = "/adr/push/receiveDeviceId")
     public @ResponseBody String receive(HttpServletRequest req, HttpSession session) {
     	
-    	String deviceIdTitle = req.getParameter("deviceIdTitle");
-    	String deviceIdToken = req.getParameter("deviceIdToken");
+    	String deviceIdToken = req.getParameter("deviceIdToken"); 	
     	
-    	int loginedClientId;
-    	Client loginedClient;
-    	int loginedExpertId;
-    	Expert loginedExpert;
-    	int loginedAdmId;
-    	Adm loginedAdm;
+    	System.out.println("현재 기기의 deviceId Token = " + deviceIdToken);
+    	session.setAttribute("deviceIdToken", deviceIdToken);
     	
-    	Map<String, Object> param = new HashMap<>();
-
-    	System.out.println(deviceIdTitle);
-    	System.out.println(deviceIdToken);
-
-		if (session.getAttribute("loginedClientId") != null) {
-			loginedClientId = (int) session.getAttribute("loginedClientId");
-			loginedClient = clientService.getClient(loginedClientId);
-			
-			if( !loginedClient.getDeviceIdToken().equals(deviceIdToken) || loginedClient.getDeviceIdToken() == null) {
-				param.put("id", loginedClientId);
-				param.put("deviceIdToken", deviceIdToken);
-				
-				clientService.modifyClient(param);
-			}
-			
-		} else if (session.getAttribute("loginedExpertId") != null) {
-			loginedExpertId = (int) session.getAttribute("loginedExpertId");
-			loginedExpert = expertService.getExpert(loginedExpertId);
-			
-			if( !loginedExpert.getDeviceIdToken().equals(deviceIdToken) || loginedExpert.getDeviceIdToken() == null) {
-				param.put("id", loginedExpertId);
-				param.put("deviceIdToken", deviceIdToken);
-				
-				expertService.modifyExpert(param);
-			}
-			
-		} else if (session.getAttribute("loginedAdmId") != null) {
-			loginedAdmId = (int) session.getAttribute("loginedAdmId");
-			loginedAdm = admService.getAdm(loginedAdmId);
-
-			if( !loginedAdm.getDeviceIdToken().equals(deviceIdToken) || loginedAdm.getDeviceIdToken() == null) {
-				param.put("id", loginedAdmId);
-				param.put("deviceIdToken", deviceIdToken);
-				
-				admService.modifyMember(param);
-			}
-			
-		}
-    	
-    	return "확인2";
+    	return "현재 기기의 deviceId Token = " + deviceIdToken;
     	
     }
     

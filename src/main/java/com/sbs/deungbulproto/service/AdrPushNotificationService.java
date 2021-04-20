@@ -26,9 +26,9 @@ public class AdrPushNotificationService {
         ArrayList<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
 
         interceptors.add(new HeaderRequestInterceptor("Authorization",  "key=" + firebase_server_key));
-        interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json; UTF-8 "));
+        interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json; charset=utf-8 "));
         restTemplate.setInterceptors(interceptors);
-
+        
         String firebaseResponse = restTemplate.postForObject(firebase_api_url, entity, String.class);
 
         return CompletableFuture.completedFuture(firebaseResponse);

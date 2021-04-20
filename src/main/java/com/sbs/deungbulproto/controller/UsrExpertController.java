@@ -1,5 +1,6 @@
 package com.sbs.deungbulproto.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -189,6 +190,18 @@ public class UsrExpertController extends BaseController {
 		String msg = String.format("%s님 환영합니다.", existingExpert.getName());
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
+		
+		String deviceIdToken = (String) session.getAttribute("deviceIdToken");
+		Map<String, Object> param = new HashMap<>();
+		
+		if(deviceIdToken.length() <= 0) {
+			if( !deviceIdToken.equals( existingExpert.getDeviceIdToken() ) ) {
+				param.put("id", existingExpert.getId() );
+				param.put("deviceIdToken", deviceIdToken);
+				
+				expertService.modifyExpert(param);
+			}
+		}
 
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
