@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sbs.deungbulproto.controller.AdrController;
 import com.sbs.deungbulproto.dao.OrderDao;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Event;
@@ -23,6 +25,10 @@ public class OrderService {
 	private OrderDao orderDao;
 	@Autowired
 	private ExpertService expertService;
+	@Autowired
+	private ClientService clientService;
+	@Autowired
+	private AdrController adrController;
 
 	public Order getOrder(int id) {
 		return orderDao.getOrder(id);
@@ -37,11 +43,6 @@ public class OrderService {
 
 		int id = Util.getAsInt(param.get("id"), 0);
 		String region = (String) param.get("region");
-
-		List<Expert> experts = expertService.getExpertsForSendSms(region);
-		for (Expert expert : experts) {
-			Util.sendSms("0100000000", expert.getCellphoneNo(), "장례지도사 의뢰가 올라왔습니다. 링크:~~");
-		}
 
 		/* 의뢰가 들어오면 이벤트 생성 또는 업데이트 시작 */
 		String relTypeCode2 = "expert";
@@ -65,9 +66,27 @@ public class OrderService {
 			if (event == null) {
 				eventService.addEvent(param1);
 			}
+
+			// 푸시 발송
+			String[] expertDeviceIdToken = new String[1];
+			Expert requestedExpert = expertService.getExpert(relId2);
+			expertDeviceIdToken[0] = requestedExpert.getDeviceIdToken();
+
+			try {
+				String msg = "의뢰 요청이 들어왔습니다.";
+				adrController.send(msg, "", expertDeviceIdToken[0]);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 		}
 		// 지도사 시나리오 - 지역별 요청
 		if (relId2 == 0) {
+
+			List<Expert> experts = expertService.getExpertsForSendSms(region);
+
 			for (Expert expert : experts) {
 
 				Map<String, Object> param2 = new HashMap<>();
@@ -86,6 +105,26 @@ public class OrderService {
 				if (event == null) {
 					eventService.addEvent(param2);
 				}
+			}
+
+			// 지역별 전체 푸시 발송
+			String[] expertsDeviceIdToken = null;
+
+			if (experts != null && experts.size() > 0) {
+				expertsDeviceIdToken = new String[experts.size()];
+				for (int i = 0; i < experts.size(); i++) {
+					// Util.sendSms("0100000000", expert.getCellphoneNo(), "장례지도사 의뢰가 올라왔습니다.
+					// 링크:~~");
+					expertsDeviceIdToken[i] = experts.get(i).getDeviceIdToken();
+				}
+			}
+			try {
+				String msg = "지역 의뢰가 올라왔습니다.";
+				adrController.send(msg, "", expertsDeviceIdToken);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -107,6 +146,7 @@ public class OrderService {
 		int relId2 = Util.getAsInt(canceledOrder.getExpertId(), 0);
 
 		if (relId2 != 0) {
+
 			Map<String, Object> param = new HashMap<>();
 			param.put("relTypeCode2", relTypeCode2);
 			param.put("relId", relId);
@@ -151,6 +191,20 @@ public class OrderService {
 			}
 			if (inProgressOrderCount == 0) {
 				expertService.setWork1(expertId);
+			}
+
+			// 푸시 발송
+			String[] expertDeviceIdToken = new String[1];
+			Expert requestedExpert = expertService.getExpert(relId2);
+			expertDeviceIdToken[0] = requestedExpert.getDeviceIdToken();
+
+			try {
+				String msg = relId + " 번 의뢰가 취소되었습니다.";
+				adrController.send(msg, "", expertDeviceIdToken[0]);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		// 수락한 전문가가 없었던 경우 해당 지역 이벤트 전체 삭제
@@ -242,6 +296,26 @@ public class OrderService {
 			if (event == null) {
 				eventService.addEvent(param);
 			}
+
+			// 푸시 발송
+			String[] clientDeviceIdToken = new String[1];
+			Client requestedClient = clientService.getClient(relId2);
+			clientDeviceIdToken[0] = requestedClient.getDeviceIdToken();
+
+			try {
+				String msg = "";
+				if (nextStepLevel == 3) {
+					msg = relId + " 번 의뢰 장례가 시작되었습니다.";
+				}
+				if (nextStepLevel == 4) {
+					msg = relId + " 번 의뢰 장례가 종료되었습니다.(종료 확인을 해주세요.)";
+				}
+				adrController.send(msg, "", clientDeviceIdToken[0]);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		// 전문가 시나리오 5 + 의뢰인 기존 이벤트있으면 stepLevel 0으로 초기화
 		if (nextStepLevel == 5) {
@@ -276,6 +350,20 @@ public class OrderService {
 			if (event2 != null) {
 				eventService.deleteEvent(param2);
 			}
+
+			// 푸시 발송
+			String[] expertDeviceIdToken = new String[1];
+			Expert requestedExpert = expertService.getExpert(relId2);
+			expertDeviceIdToken[0] = requestedExpert.getDeviceIdToken();
+
+			try {
+				String msg = relId + " 번 의뢰가 '최종 종료' 되었습니다.";
+				adrController.send(msg, "", expertDeviceIdToken[0]);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		/* 진행단계가 변경되면 이벤트 생성 또는 업데이트 끝 */
 
@@ -285,10 +373,10 @@ public class OrderService {
 			msg = "장례 진행";
 		}
 		if (nextStepLevel == 4) {
-			msg = "장례종료 확인 요청을 보냈습니다.";
+			msg = "장례종료 '확인 요청'을 보냈습니다.";
 		}
 		if (nextStepLevel == 5) {
-			msg = "의뢰가 최종 종료되었습니다. 후기를 작성해주세요.";
+			msg = "의뢰가 '최종 종료'되었습니다. 후기를 작성해주세요.";
 
 			// 남은 의뢰가 없으면 지도사 work 1로 변경
 			Map<String, Object> param = new HashMap<>();
@@ -346,6 +434,20 @@ public class OrderService {
 			eventService.addEvent(param);
 		}
 
+		// 푸시 발송
+		String[] clientDeviceIdToken = new String[1];
+		Client requestedClient = clientService.getClient(relId2);
+		clientDeviceIdToken[0] = requestedClient.getDeviceIdToken();
+
+		try {
+			String msg = "요청하신 " + relId + "번 의뢰가 '수락'되었습니다.";
+			adrController.send(msg, "", clientDeviceIdToken[0]);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		// 전문가 시나리오
 		// 지역 요청을 다른 사람이 수락하면 수락한 전문가를 제외한 해당 지역 이벤트 전체 삭제
 		relTypeCode2 = "expert";
@@ -390,6 +492,21 @@ public class OrderService {
 			eventService.addEvent(param);
 		}
 
+		// 푸시 발송
+		String[] clientDeviceIdToken = new String[1];
+		Client requestedClient = clientService.getClient(relId2);
+		clientDeviceIdToken[0] = requestedClient.getDeviceIdToken();
+
+		try {
+			String msg = "요청하신 " + relId + "번 의뢰가 '거절'되었습니다.";
+			adrController.send(msg, "", clientDeviceIdToken[0]);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		
 		// 지도사 시나리오
 		// 요청이 거절되면 다른 전문가들의 지역 이벤트 다시 생성
 		relTypeCode2 = "expert";

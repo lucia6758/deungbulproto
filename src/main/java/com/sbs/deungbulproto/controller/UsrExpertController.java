@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sbs.deungbulproto.container.Container;
 import com.sbs.deungbulproto.dto.Expert;
 import com.sbs.deungbulproto.dto.ResultData;
 import com.sbs.deungbulproto.service.ExpertService;
@@ -151,6 +152,19 @@ public class UsrExpertController extends BaseController {
 
 			return new ResultData("F-4", "죄송합니다. 회원정보 검토 결과 입력해주신 내용에 미흡한 부분이 발견되어 가입이 '거절'되셨습니다. 다시 회원가입 해주세요.");
 		}
+		
+		// 회원의 디바이스 아이디 토큰 업데이트
+		String deviceIdToken = (String) Container.session.deviceIdToken;
+		Map<String, Object> param = new HashMap<>();
+		
+		if(deviceIdToken.length() > 0) {
+			if( !deviceIdToken.equals( existingExpert.getDeviceIdToken() ) ) {
+				param.put("id", existingExpert.getId() );
+				param.put("deviceIdToken", deviceIdToken);
+				
+				expertService.modifyExpert(param);
+			}
+		}
 
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingExpert.getName()), "authKey",
 				existingExpert.getAuthKey(), "expert", existingExpert);
@@ -190,18 +204,6 @@ public class UsrExpertController extends BaseController {
 		String msg = String.format("%s님 환영합니다.", existingExpert.getName());
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
-		
-		String deviceIdToken = (String) session.getAttribute("deviceIdToken");
-		Map<String, Object> param = new HashMap<>();
-		
-		if(deviceIdToken.length() <= 0) {
-			if( !deviceIdToken.equals( existingExpert.getDeviceIdToken() ) ) {
-				param.put("id", existingExpert.getId() );
-				param.put("deviceIdToken", deviceIdToken);
-				
-				expertService.modifyExpert(param);
-			}
-		}
 
 		return Util.msgAndReplace(msg, redirectUrl);
 	}

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sbs.deungbulproto.container.Container;
 import com.sbs.deungbulproto.dto.Adm;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Expert;
@@ -68,18 +69,6 @@ public class AdmMemberController extends BaseController {
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
 
-		String deviceIdToken = (String) session.getAttribute("deviceIdToken");
-		Map<String, Object> param = new HashMap<>();
-		
-		if(deviceIdToken.length() <= 0) {
-			if( !deviceIdToken.equals( existingAdm.getDeviceIdToken() ) ) {
-				param.put("id", existingAdm.getId() );
-				param.put("deviceIdToken", deviceIdToken);
-				
-				admMemberService.modifyMember(param);
-			}
-		}
-		
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
 
@@ -182,6 +171,19 @@ public class AdmMemberController extends BaseController {
 
 		if (existingAdm.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
+		}
+
+		// 회원의 디바이스 아이디 토큰 업데이트
+		String deviceIdToken = (String) Container.session.deviceIdToken;
+		Map<String, Object> param = new HashMap<>();
+
+		if (deviceIdToken.length() > 0) {
+			if (!deviceIdToken.equals(existingAdm.getDeviceIdToken())) {
+				param.put("id", existingAdm.getId());
+				param.put("deviceIdToken", deviceIdToken);
+
+				admMemberService.modifyMember(param);
+			}
 		}
 
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingAdm.getName()), "authKey",
