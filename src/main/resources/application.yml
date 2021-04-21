@@ -1,6 +1,11 @@
-server:
-  port: 8021
 spring:
+  profiles:
+    active: local # 기본적으로 local이 선택된다는 뜻
+  servlet:
+    multipart:
+      location: C:\temp
+      max-file-size: 100MB
+      max-request-size: 100MB
   mvc:
     view:
       prefix: /WEB-INF/jsp/
@@ -12,14 +17,44 @@ spring:
     password: sbs123414
 mybatis:
   type-aliases-package: com.sbs.deungbulproto.dto
+server:
+  error:
+    include-exception: true
+    include-stacktrace: always
+    include-message: always
+    include-binding-errors: always
 custom:
   aligo:
     userId: nwh1124
     apiKey: mr08xert0x6g3evyc5tksi0gl9syrign
-  kakaoRest:
-    apiKey: 39e3f2abe5c8568bd7bd31303efd8a43
-    redirectUrl: http://localhost:8020/usr/member/doLoginByKakoRest
   genFileDirPath: C:/work/deungbul-file
   logging:
     dir: log
     level: debug
+    
+    
+---
+
+spring:
+  profiles: local
+server:
+  port: 8021
+
+---
+
+spring:
+  profiles: production
+  servlet:
+    multipart:
+      location: /tmp
+  datasource:
+    username: sbsst
+    password: sbs123414
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/deungbulTest?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
+custom:
+  genFileDirPath: /opt/tomcat/latest/sangjanrye-file
+  tmpDirPath: "/tmp"
+  logging:
+    dir: /tmp/deungbulproto-log
+    level: info 

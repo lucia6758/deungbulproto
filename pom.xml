@@ -8,14 +8,15 @@
 		<version>2.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.sbs.deungbul-proto</groupId>
-	<artifactId>deungbul-proto</artifactId>
+	<groupId>deungbulproto</groupId>
+	<artifactId>deungbulproto</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>deungbul-proto</name>
-	<description>deungbul-proto</description>
+	<name>deungbulproto</name>
+	<description>deungbulproto</description>
 	<properties>
 		<java.version>11</java.version>
+<!-- 		<start-class>com.sbs.deungbulproto.DeungbulProtoApplication</start-class> -->
 	</properties>
 		<dependencies>
 		
@@ -146,6 +147,17 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		
+		<!-- 21.04.21 추가 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		
 		<!-- 구아바(구글에서 만든 유용한 유틸) -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -156,6 +168,32 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<server>sangjangrye__manager_text</server>
+					<url>http://fortest3.sangjangrye.kr:8080/manager/text</url>
+					<path>/ROOT</path>
+				</configuration>
+			</plugin>
+			<plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>14</release>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.3</version>
+                <configuration>
+                    <warSourceDirectory>WebContent</warSourceDirectory>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
