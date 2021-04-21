@@ -175,15 +175,18 @@ public class AdmMemberController extends BaseController {
 
 		// 회원의 디바이스 아이디 토큰 업데이트
 		String deviceIdToken = (String) Container.session.deviceIdToken;
-		Map<String, Object> param = new HashMap<>();
+		
+		if( deviceIdToken != null ) {			
+			Map<String, Object> param = new HashMap<>();
 
-		if (deviceIdToken.length() > 0) {
-			if (!deviceIdToken.equals(existingAdm.getDeviceIdToken())) {
-				param.put("id", existingAdm.getId());
-				param.put("deviceIdToken", deviceIdToken);
+			if (deviceIdToken.length() > 0) {
+				if (!deviceIdToken.equals(existingAdm.getDeviceIdToken())) {
+					param.put("id", existingAdm.getId());
+					param.put("deviceIdToken", deviceIdToken);
 
-				admMemberService.modifyMember(param);
-			}
+					admMemberService.modifyMember(param);
+				}
+			}			
 		}
 
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingAdm.getName()), "authKey",
