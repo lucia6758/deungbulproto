@@ -87,43 +87,46 @@ public class OrderService {
 
 			List<Expert> experts = expertService.getExpertsForSendSms(region);
 
-			for (Expert expert : experts) {
+			if(experts.size() > 0) {
+				for (Expert expert : experts) {
 
-				Map<String, Object> param2 = new HashMap<>();
-				param2.put("relTypeCode2", relTypeCode2);
-				param2.put("relId", relId);
-				param2.put("relId2", expert.getId());
-				param2.put("region", region);
+					Map<String, Object> param2 = new HashMap<>();
+					param2.put("relTypeCode2", relTypeCode2);
+					param2.put("relId", relId);
+					param2.put("relId2", expert.getId());
+					param2.put("region", region);
 
-				// 기존 이벤트 존재여부 체크
-				Event event = eventService.getEvent(param2);
-				// 기존 이벤트가 있고region이 ""이면 기존 이벤트를 업데이트
-				if (event != null && event.getRegion().equals("")) {
-					eventService.updateEvent(param2);
+					// 기존 이벤트 존재여부 체크
+					Event event = eventService.getEvent(param2);
+					// 기존 이벤트가 있고region이 ""이면 기존 이벤트를 업데이트
+					if (event != null && event.getRegion().equals("")) {
+						eventService.updateEvent(param2);
+					}
+					// 기존 이벤트가 없으면 새 이벤트 생성
+					if (event == null) {
+						eventService.addEvent(param2);
+					}
 				}
-				// 기존 이벤트가 없으면 새 이벤트 생성
-				if (event == null) {
-					eventService.addEvent(param2);
+
+				// 지역별 전체 푸시 발송
+				String[] expertsDeviceIdToken = null;
+
+				if (experts != null && experts.size() > 0) {
+					expertsDeviceIdToken = new String[experts.size()];
+					for (int i = 0; i < experts.size(); i++) {
+						expertsDeviceIdToken[i] = experts.get(i).getDeviceIdToken();
+					}
+				}
+				try {
+					String msg = "지역 의뢰가 올라왔습니다.";
+					adrController.send(msg, "", expertsDeviceIdToken);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
-
-			// 지역별 전체 푸시 발송
-			String[] expertsDeviceIdToken = null;
-
-			if (experts != null && experts.size() > 0) {
-				expertsDeviceIdToken = new String[experts.size()];
-				for (int i = 0; i < experts.size(); i++) {
-					expertsDeviceIdToken[i] = experts.get(i).getDeviceIdToken();
-				}
-			}
-			try {
-				String msg = "지역 의뢰가 올라왔습니다.";
-				adrController.send(msg, "", expertsDeviceIdToken);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			
 		}
 
 		/* 의뢰가 들어오면 이벤트 생성 또는 업데이트 끝 */
@@ -512,27 +515,29 @@ public class OrderService {
 		String region = order.getRegion();
 
 		List<Expert> experts = expertService.getExpertsForSendSms(region);
+		if(experts.size() > 0) {
+			for (Expert expert : experts) {
+				if (needExceptRelId2 != expert.getId()) {
+					Map<String, Object> param2 = new HashMap<>();
+					param2.put("relTypeCode2", relTypeCode2);
+					param2.put("relId", relId);
+					param2.put("relId2", expert.getId());
+					param2.put("region", region);
 
-		for (Expert expert : experts) {
-			if (needExceptRelId2 != expert.getId()) {
-				Map<String, Object> param2 = new HashMap<>();
-				param2.put("relTypeCode2", relTypeCode2);
-				param2.put("relId", relId);
-				param2.put("relId2", expert.getId());
-				param2.put("region", region);
-
-				// 기존 이벤트 존재여부 체크
-				Event event2 = eventService.getEvent(param2);
-				// 기존 이벤트가 있고region이 ""이면 기존 이벤트를 업데이트
-				if (event2 != null && event.getRegion().equals("")) {
-					eventService.updateEvent(param2);
-				}
-				// 기존 이벤트가 없으면 새 이벤트 생성
-				if (event2 == null) {
-					eventService.addEvent(param2);
+					// 기존 이벤트 존재여부 체크
+					Event event2 = eventService.getEvent(param2);
+					// 기존 이벤트가 있고region이 ""이면 기존 이벤트를 업데이트
+					if (event2 != null && event.getRegion().equals("")) {
+						eventService.updateEvent(param2);
+					}
+					// 기존 이벤트가 없으면 새 이벤트 생성
+					if (event2 == null) {
+						eventService.addEvent(param2);
+					}
 				}
 			}
 		}
+		
 		/* 요청이 거절되면 이벤트 생성 또는 이벤트 업데이트 끝 */
 
 		// 남은 다른 의뢰가 없으면 지도사 work 1로 변경
