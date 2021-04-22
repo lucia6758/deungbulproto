@@ -40,10 +40,11 @@ public class OrderService {
 
 	public ResultData addOrder(Map<String, Object> param) {
 		orderDao.addOrder(param);
-
+		System.out.println("11111111111111 : ");
 		int id = Util.getAsInt(param.get("id"), 0);
 		String region = (String) param.get("region");
-
+		System.out.println("11111111111111 : " + id);
+		System.out.println("11111111111111 : " + region);
 		/* 의뢰가 들어오면 이벤트 생성 또는 업데이트 시작 */
 		String relTypeCode2 = "expert";
 		int relId = id;
@@ -85,44 +86,49 @@ public class OrderService {
 		// 지도사 시나리오 - 지역별 요청
 		if (relId2 == 0) {
 
+			System.out.println("11111111111111 : ");
 			List<Expert> experts = expertService.getExpertsForSendSms(region);
 
-			for (Expert expert : experts) {
+			if(experts.size() > 0) {
+				for (Expert expert : experts) {
+					System.out.println("2222222222222222222222 : ");
+					Map<String, Object> param2 = new HashMap<>();
+					param2.put("relTypeCode2", relTypeCode2);
+					param2.put("relId", relId);
+					param2.put("relId2", expert.getId());
+					param2.put("region", region);
 
-				Map<String, Object> param2 = new HashMap<>();
-				param2.put("relTypeCode2", relTypeCode2);
-				param2.put("relId", relId);
-				param2.put("relId2", expert.getId());
-				param2.put("region", region);
-
-				// 기존 이벤트 존재여부 체크
-				Event event = eventService.getEvent(param2);
-				// 기존 이벤트가 있고region이 ""이면 기존 이벤트를 업데이트
-				if (event != null && event.getRegion().equals("")) {
-					eventService.updateEvent(param2);
+					// 기존 이벤트 존재여부 체크
+					Event event = eventService.getEvent(param2);
+					// 기존 이벤트가 있고region이 ""이면 기존 이벤트를 업데이트
+					if (event != null && event.getRegion().equals("")) {
+						eventService.updateEvent(param2);
+					}
+					// 기존 이벤트가 없으면 새 이벤트 생성
+					if (event == null) {
+						eventService.addEvent(param2);
+					}
+					System.out.println("333333333333333333 : ");
 				}
-				// 기존 이벤트가 없으면 새 이벤트 생성
-				if (event == null) {
-					eventService.addEvent(param2);
-				}
-			}
+				
+				System.out.println("444444444444444444 : ");
+				// 지역별 전체 푸시 발송
+				String[] expertsDeviceIdToken = null;
 
-			// 지역별 전체 푸시 발송
-			String[] expertsDeviceIdToken = null;
-
-			if (experts != null && experts.size() > 0) {
-				expertsDeviceIdToken = new String[experts.size()];
-				for (int i = 0; i < experts.size(); i++) {
-					expertsDeviceIdToken[i] = experts.get(i).getDeviceIdToken();
+				if (experts != null && experts.size() > 0) {
+					expertsDeviceIdToken = new String[experts.size()];
+					for (int i = 0; i < experts.size(); i++) {
+						expertsDeviceIdToken[i] = experts.get(i).getDeviceIdToken();
+					}
 				}
-			}
-			try {
-				String msg = "지역 의뢰가 올라왔습니다.";
-				adrController.send(msg, "", expertsDeviceIdToken);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				try {
+					String msg = "지역 의뢰가 올라왔습니다.";
+					adrController.send(msg, "", expertsDeviceIdToken);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 

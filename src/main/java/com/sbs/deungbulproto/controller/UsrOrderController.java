@@ -89,7 +89,7 @@ public class UsrOrderController {
 	@PostMapping("/usr/order/doAdd")
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param) {
-
+		System.out.println("11111111111111 : ");
 		ResultData addOrderRd = orderService.addOrder(param);
 
 		int newOrderId = (int) addOrderRd.getBody().get("id");
