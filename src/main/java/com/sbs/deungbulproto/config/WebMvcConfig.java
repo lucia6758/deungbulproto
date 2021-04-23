@@ -39,7 +39,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(beforeActionInterceptor).addPathPatterns("/**").excludePathPatterns("/resource/**")
-				.excludePathPatterns("/gen/**").excludePathPatterns("/adr/**");
+				.excludePathPatterns("/gen/**").excludePathPatterns("/adr/**").excludePathPatterns("/usr/home/doSendSms");
 
 		// 관리자
 		registry.addInterceptor(needAdminInterceptor).addPathPatterns("/adm/**")
@@ -68,7 +68,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/usr/expert/doFindLoginId").excludePathPatterns("/usr/expert/findLoginPw")
 				.excludePathPatterns("/usr/expert/doFindLoginPw").excludePathPatterns("/usr/order/list")
 				.excludePathPatterns("/usr/order/detail").excludePathPatterns("/usr/review/list")
-				.excludePathPatterns("/adr/**")
+				.excludePathPatterns("/adr/**").excludePathPatterns("/usr/home/doSendSms")
 				.excludePathPatterns("/common/**").excludePathPatterns("/usr/file/test*")
 				.excludePathPatterns("/usr/file/doTest*").excludePathPatterns("/test/**").excludePathPatterns("/error");
 
