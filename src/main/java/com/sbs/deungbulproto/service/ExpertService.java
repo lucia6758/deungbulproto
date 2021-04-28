@@ -217,7 +217,7 @@ public class ExpertService {
 	private void setTempPassword(Expert actor, String tempPassword) {
 		Map<String, Object> modifyArg = new HashMap<>();
 		modifyArg.put("id", actor.getId());
-		modifyArg.put("loginPw", tempPassword);
+		modifyArg.put("loginPw", Util.hmac_sha256(tempPassword));
 
 		// 회원정보 수정
 		modifyClient(modifyArg);
