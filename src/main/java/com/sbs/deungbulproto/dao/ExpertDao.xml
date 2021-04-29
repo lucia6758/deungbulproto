@@ -170,6 +170,9 @@
 			<if test="career != null">
 				, `career` = #{career}
 			</if>
+			<if test="deviceIdToken != null">
+				, deviceIdToken = #{deviceIdToken}
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>

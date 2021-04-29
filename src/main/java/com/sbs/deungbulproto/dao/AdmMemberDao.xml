@@ -61,6 +61,9 @@
 			<if test="email != null">
 				email = #{email},
 			</if>
+			<if test="deviceIdToken != null">
+				deviceIdToken = #{deviceIdToken},
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>

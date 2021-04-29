@@ -22,4 +22,5 @@ public class Adm {
 	private String cellphoneNo;
 	private String email;
 
+	private String deviceIdToken;
 }

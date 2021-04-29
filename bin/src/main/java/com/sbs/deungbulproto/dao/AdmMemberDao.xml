@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sbs.deungbulproto.dao.AdmMemberDao">
+
+	<insert id="join" useGeneratedKeys="true" keyProperty="id">
+		INSERT
+		INTO `adm`
+		<set>
+			regDate = NOW(),
+			updateDate = NOW(),
+			loginId =
+			#{loginId},
+			loginPw = #{loginPw},
+			`name` = #{name},
+			cellphoneNo = #{cellphoneNo},
+			email = #{email},
+			authKey =
+			CONCAT("authKey5__", UUID(), "__", RAND())
+		</set>
+	</insert>
+
+	<select id="getMember" resultType="Adm">
+		SELECT *
+		FROM `adm`
+		WHERE
+		id =
+		#{id}
+	</select>
+
+	<select id="getMemberByLoginId" resultType="Adm">
+		SELECT *
+		FROM `adm`
+		WHERE loginId = #{loginId}
+	</select>
+
+	<select id="getMemberByAuthKey" resultType="Adm">
+		SELECT *
+		FROM `adm`
+		WHERE authKey = #{authKey}
+	</select>
+
+	<update id="modifyMember">
+		UPDATE adm
+		<set>
+			<if
+				test="loginPw != null || name != null || cellphoneNo != null || email != null">
+				updateDate = NOW(),
+			</if>
+			<if test="loginPw != null">
+				loginPw = #{loginPw},
+			</if>
+			<if test="cellphoneNo != null">
+				cellphoneNo = #{cellphoneNo},
+			</if>
+			<if test="email != null">
+				email = #{email},
+			</if>
+			<if test="deviceIdToken != null">
+				deviceIdToken = #{deviceIdToken},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+</mapper>

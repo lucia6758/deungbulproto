@@ -1,5 +1,6 @@
 package com.sbs.deungbulproto.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sbs.deungbulproto.container.Container;
+import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Expert;
 import com.sbs.deungbulproto.dto.ResultData;
 import com.sbs.deungbulproto.service.ExpertService;
@@ -89,22 +92,6 @@ public class UsrExpertController extends BaseController {
 		return expertService.join(param);
 	}
 
-	@GetMapping("/usr/expert/doDelete")
-	@ResponseBody
-	public ResultData doDelete(HttpServletRequest req, int id) {
-
-		Expert expert = expertService.getForPrintExpert(id);
-
-		if (expert == null) {
-			return new ResultData("F-1", "로그인 후 이용가능합니다.");
-		}
-
-		expertService.delete(id);
-		req.setAttribute("name", expert.getName());
-
-		return new ResultData("S-1", "성공", "body", expert.getName());
-	}
-
 	@GetMapping("/usr/expert/expertByAuthKey")
 	@ResponseBody
 	public ResultData showExpertByAuthKey(String authKey) {
@@ -149,6 +136,21 @@ public class UsrExpertController extends BaseController {
 			expertService.delete(existingExpert.getId());
 
 			return new ResultData("F-4", "죄송합니다. 회원정보 검토 결과 입력해주신 내용에 미흡한 부분이 발견되어 가입이 '거절'되셨습니다. 다시 회원가입 해주세요.");
+		}
+		
+		// 회원의 디바이스 아이디 토큰 업데이트
+		String deviceIdToken = (String) Container.session.deviceIdToken;
+		if( deviceIdToken != null ) {
+			Map<String, Object> param = new HashMap<>();
+			
+			if(deviceIdToken.length() > 0) {
+				if( !deviceIdToken.equals( existingExpert.getDeviceIdToken() ) ) {
+					param.put("id", existingExpert.getId() );
+					param.put("deviceIdToken", deviceIdToken);
+					
+					expertService.modifyExpert(param);
+				}
+			}
 		}
 
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingExpert.getName()), "authKey",
@@ -280,6 +282,21 @@ public class UsrExpertController extends BaseController {
 		}
 
 		return expertService.getExpertByLoginIdAndEmail(param);
+	}
+
+	@GetMapping("/usr/expert/doDelete")
+	@ResponseBody
+	public ResultData doDelete(int id) {
+
+		Expert expert = expertService.getForPrintExpert(id);
+
+		if (expert == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+		}
+
+		expertService.delete(id);
+
+		return new ResultData("S-1", "성공", "name", expert.getName());
 	}
 
 }

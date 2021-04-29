@@ -1,5 +1,6 @@
 package com.sbs.deungbulproto.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sbs.deungbulproto.container.Container;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.ResultData;
 import com.sbs.deungbulproto.service.ClientService;
@@ -53,6 +55,7 @@ public class UsrClientController extends BaseController {
 		String msg = String.format("%s님 환영합니다.", existingClient.getName());
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
+		
 
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
@@ -116,22 +119,6 @@ public class UsrClientController extends BaseController {
 		return clientService.join(param);
 	}
 
-	@GetMapping("/usr/client/doDelete")
-	@ResponseBody
-	public ResultData doDelete(HttpServletRequest req, int id) {
-
-		Client client = clientService.getForPrintClient(id);
-
-		if (client == null) {
-			return new ResultData("F-1", "로그인 후 이용가능합니다.");
-		}
-
-		clientService.delete(id);
-		req.setAttribute("name", client.getName());
-
-		return new ResultData("S-1", "성공", "body", client.getName());
-	}
-
 	@GetMapping("/usr/client/clientByAuthKey")
 	@ResponseBody
 	public ResultData showMemberByAuthKey(String authKey) {
@@ -168,24 +155,21 @@ public class UsrClientController extends BaseController {
 		if (existingClient.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
-<<<<<<< Updated upstream
-=======
 
-		// 회원의 디바이스 아이디 토큰 업데이트
+		// 회원의 디바이스 아이디 토큰 업데이트	
 		String deviceIdToken = (String) Container.session.deviceIdToken;
-		if (deviceIdToken != null) {
+		if( deviceIdToken != null ) {
 			Map<String, Object> param = new HashMap<>();
-
-			if (deviceIdToken.length() > 0) {
-				if (!deviceIdToken.equals(existingClient.getDeviceIdToken())) {
-					param.put("id", existingClient.getId());
+		
+			if(deviceIdToken.length() > 0) {
+				if( !deviceIdToken.equals( existingClient.getDeviceIdToken() ) ) {
+					param.put("id", existingClient.getId() );
 					param.put("deviceIdToken", deviceIdToken);
 
 					clientService.modifyClient(param);
 				}
 			}
 		}
->>>>>>> Stashed changes
 
 		return new ResultData("S-1", String.format("%s님 반갑습니다.", existingClient.getName()), "authKey",
 				existingClient.getAuthKey(), "client", existingClient);
@@ -201,8 +185,6 @@ public class UsrClientController extends BaseController {
 
 		return new ResultData("S-1", "성공", "client", client);
 	}
-<<<<<<< Updated upstream
-=======
 
 	@PostMapping("/usr/client/doFindLoginId")
 	@ResponseBody
@@ -252,6 +234,4 @@ public class UsrClientController extends BaseController {
 
 		return new ResultData("S-1", "성공", "name", client.getName());
 	}
->>>>>>> Stashed changes
-
 }

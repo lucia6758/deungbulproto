@@ -7,7 +7,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -20,6 +22,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpResponse;
@@ -30,6 +34,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -128,6 +133,8 @@ public class Util {
 
 			Aligo__send__ResponseBody rb = Util.getObjectFromJsonString(result, Aligo__send__ResponseBody.class);
 
+			
+			System.out.println("result : " + result);
 			return rb;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,6 +142,8 @@ public class Util {
 			rb.message = e.getLocalizedMessage();
 			rb.msg_id = "-1";
 			rb.error_cnt = 1;
+			
+			System.out.println("rb : " + rb);
 			return rb;
 		}
 	}
@@ -508,5 +517,44 @@ public class Util {
 		// _, 알파벳, 숫자로만 구성
 		return Pattern.matches("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,19}$", str);
 	}
+	
+	// hash 알고리즘 선택
+    private static String hashingAlgorithm = "HmacSHA256";
+    // hash 암호화 key
+    private static String hashingKey = "SecretKey2$5$984";
+ 
+    public static String hmac_sha256(String base) {
+        try {
+            // hash 알고리즘과 암호화 key 적용
+            Mac hasher = Mac.getInstance(hashingAlgorithm);
+            hasher.init(new SecretKeySpec(hashingKey.getBytes(), hashingAlgorithm));
+ 
+            // messages를 암호화 적용 후 byte 배열 형태의 결과 리턴
+            byte[] hash = hasher.doFinal(base.getBytes());
+            return byteToString(hash);
+        }
+        catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+        catch (InvalidKeyException e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+ 
+    // byte[]의 값을 16진수 형태의 문자로 변환하는 함수
+    private static String byteToString(byte[] hash) {
+        StringBuffer buffer = new StringBuffer();
+ 
+        for (int i = 0; i < hash.length; i++) {
+            int d = hash[i];
+            d += (d < 0)? 256 : 0;
+            if (d < 16) {
+                buffer.append("0");
+            }
+            buffer.append(Integer.toString(d, 16));
+        }
+        return buffer.toString();
+    }
 
 }

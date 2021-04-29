@@ -1,5 +1,6 @@
 package com.sbs.deungbulproto.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sbs.deungbulproto.container.Container;
 import com.sbs.deungbulproto.dto.Adm;
 import com.sbs.deungbulproto.dto.Client;
 import com.sbs.deungbulproto.dto.Expert;
@@ -186,12 +188,10 @@ public class AdmMemberController extends BaseController {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 
-<<<<<<< Updated upstream
-=======
 		// 회원의 디바이스 아이디 토큰 업데이트
 		String deviceIdToken = (String) Container.session.deviceIdToken;
-
-		if (deviceIdToken != null) {
+		
+		if( deviceIdToken != null ) {			
 			Map<String, Object> param = new HashMap<>();
 
 			if (deviceIdToken.length() > 0) {
@@ -201,10 +201,8 @@ public class AdmMemberController extends BaseController {
 
 					admMemberService.modifyMember(param);
 				}
-			}
+			}			
 		}
-
->>>>>>> Stashed changes
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingAdm.getName()), "authKey",
 				existingAdm.getAuthKey(), "id", existingAdm.getId(), "name", existingAdm.getName());
 	}

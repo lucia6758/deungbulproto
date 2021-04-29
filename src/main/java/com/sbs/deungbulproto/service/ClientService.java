@@ -138,16 +138,13 @@ public class ClientService {
 
 		// 발급받은 임시패스워드로 회원 정보 업데이트
 		setTempPassword(actor, tempPassword);
-<<<<<<< Updated upstream
-=======
 		
 		// 문자로 발송
 		String clientCellPhoneNo = actor.getCellphoneNo().replaceAll("[-+.^:,]","");
-		Util.sendSms("01068271739", clientCellPhoneNo, "회원님의 임시 비밀번호는 '" + tempPassword + "' 입니다.");
->>>>>>> Stashed changes
+		Util.sendSms("01068271739", clientCellPhoneNo, "[상장례] 회원님의 임시 비밀번호는 '" + tempPassword + "' 입니다.");
 
-		String resultMsg = "회원님의 임시 비밀번호는 \"" + tempPassword + "\"입니다.";
-
+		String resultMsg = "회원님의 임시 비밀번호를 문자로 발송하였습니다.";
+		
 		return new ResultData("S-1", resultMsg);
 
 	}
@@ -155,7 +152,7 @@ public class ClientService {
 	private void setTempPassword(Client actor, String tempPassword) {
 		Map<String, Object> modifyArg = new HashMap<>();
 		modifyArg.put("id", actor.getId());
-		modifyArg.put("loginPw", tempPassword);
+		modifyArg.put("loginPw", Util.hmac_sha256(tempPassword));
 
 		// 회원정보 수정
 		modifyClient(modifyArg);
