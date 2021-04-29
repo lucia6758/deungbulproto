@@ -28,11 +28,8 @@
 		class="container mx-auto min-h-screen flex items-center justify-center">
 		<div class="w-full">
 			<div class="logo-bar flex justify-center mt-3">
-				<a href="#" class="logo">
-					<span>
-						<i class="fas fa-people-arrows"></i>
-					</span>
-					<span>ADMIN</span>
+				<a class="logo">					
+					<span>상장례 관리자페이지</span>
 				</a>
 			</div>
 			<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4"

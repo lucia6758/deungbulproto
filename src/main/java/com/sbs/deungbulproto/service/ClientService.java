@@ -138,6 +138,13 @@ public class ClientService {
 
 		// 발급받은 임시패스워드로 회원 정보 업데이트
 		setTempPassword(actor, tempPassword);
+<<<<<<< Updated upstream
+=======
+		
+		// 문자로 발송
+		String clientCellPhoneNo = actor.getCellphoneNo().replaceAll("[-+.^:,]","");
+		Util.sendSms("01068271739", clientCellPhoneNo, "회원님의 임시 비밀번호는 '" + tempPassword + "' 입니다.");
+>>>>>>> Stashed changes
 
 		String resultMsg = "회원님의 임시 비밀번호는 \"" + tempPassword + "\"입니다.";
 

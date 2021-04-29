@@ -27,25 +27,31 @@
 		SELECT E.*,
 		AVG(R.point) AS extra__ratingPoint
 		FROM `expert` AS E
-		LEFT JOIN `rating` AS R
+		LEFT
+		JOIN `rating` AS R
 		ON
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
 		WHERE 1
+		<if test="acknowledgment_step != null and acknowledgment_step != ''">
+			AND E.acknowledgment_step = #{acknowledgment_step}
+		</if>
 		GROUP BY E.id
 		ORDER BY E.id DESC
 	</select>
 
 	<select id="getExperts" resultType="Expert">
 		SELECT E.*,
-		AVG(R.point) AS extra__ratingPoint
+		AVG(R.point) AS
+		extra__ratingPoint
 		FROM `expert` AS E
 		LEFT JOIN `rating` AS R
 		ON
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
 		WHERE 1
-		AND E.acknowledgment_step = 2
+		AND
+		E.acknowledgment_step = 2
 		GROUP BY E.id
 		ORDER BY E.id DESC
 	</select>
@@ -54,12 +60,14 @@
 		SELECT E.*,
 		AVG(R.point) AS extra__ratingPoint
 		FROM `expert` AS E
-		LEFT JOIN `rating` AS R
+		LEFT JOIN `rating`
+		AS R
 		ON
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
 		WHERE 1
-		AND E.acknowledgment_step = 2
+		AND
+		E.acknowledgment_step = 2
 		AND E.region = #{region}
 		GROUP BY E.id
 		ORDER BY
@@ -96,9 +104,15 @@
 	</select>
 
 	<select id="getForPrintExpert" resultType="Expert">
-		SELECT *
-		FROM `expert`
-		WHERE id = #{id}
+		SELECT E.*,
+		AVG(R.point) AS extra__ratingPoint
+		FROM `expert` AS E
+		LEFT JOIN `rating`
+		AS R
+		ON
+		R.relTypeCode = 'expert'
+		AND E.id = R.relId
+		WHERE E.id = #{id}
 	</select>
 
 	<select id="getExpertsForSendSms" resultType="Expert">
@@ -107,7 +121,8 @@
 		`expert`
 		WHERE `work` = 1
 		AND acknowledgment_step = 2
-		AND region = #{region}
+		AND region =
+		#{region}
 	</select>
 
 	<!-- public Expert getExpertByLoginId(@Param(value = "loginId") String loginId); -->
@@ -181,7 +196,7 @@
 		AND `loginId` = #{loginId}
 		AND `email` = #{email}
 	</select>
-	
+
 	<update id="confirmExpert">
 		UPDATE `expert`
 		<set>
@@ -190,7 +205,7 @@
 		</set>
 		WHERE id = #{id}
 	</update>
-	
+
 	<update id="rejectExpert">
 		UPDATE `expert`
 		<set>
@@ -199,5 +214,5 @@
 		</set>
 		WHERE id = #{id}
 	</update>
-	
+
 </mapper>

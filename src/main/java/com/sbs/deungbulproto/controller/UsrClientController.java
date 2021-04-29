@@ -48,7 +48,7 @@ public class UsrClientController extends BaseController {
 			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
 
-		session.setAttribute("loginedMemberId", existingClient.getId());
+		session.setAttribute("loginedClientId", existingClient.getId());
 
 		String msg = String.format("%s님 환영합니다.", existingClient.getName());
 
@@ -60,7 +60,7 @@ public class UsrClientController extends BaseController {
 	@GetMapping("/usr/client/doLogout")
 	@ResponseBody
 	public String doLogout(HttpSession session) {
-		session.removeAttribute("loginedMemberId");
+		session.removeAttribute("loginedClientId");
 
 		return Util.msgAndReplace("로그아웃 되었습니다.", "../member/login");
 	}
@@ -112,7 +112,6 @@ public class UsrClientController extends BaseController {
 		if (param.get("region") == null) {
 			return new ResultData("F-1", "region을 입력해주세요.");
 		}
-
 
 		return clientService.join(param);
 	}
@@ -169,6 +168,24 @@ public class UsrClientController extends BaseController {
 		if (existingClient.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
+<<<<<<< Updated upstream
+=======
+
+		// 회원의 디바이스 아이디 토큰 업데이트
+		String deviceIdToken = (String) Container.session.deviceIdToken;
+		if (deviceIdToken != null) {
+			Map<String, Object> param = new HashMap<>();
+
+			if (deviceIdToken.length() > 0) {
+				if (!deviceIdToken.equals(existingClient.getDeviceIdToken())) {
+					param.put("id", existingClient.getId());
+					param.put("deviceIdToken", deviceIdToken);
+
+					clientService.modifyClient(param);
+				}
+			}
+		}
+>>>>>>> Stashed changes
 
 		return new ResultData("S-1", String.format("%s님 반갑습니다.", existingClient.getName()), "authKey",
 				existingClient.getAuthKey(), "client", existingClient);
@@ -184,5 +201,57 @@ public class UsrClientController extends BaseController {
 
 		return new ResultData("S-1", "성공", "client", client);
 	}
+<<<<<<< Updated upstream
+=======
+
+	@PostMapping("/usr/client/doFindLoginId")
+	@ResponseBody
+	public ResultData doFindLoginId(@RequestParam Map<String, Object> param) {
+
+		String name = (String) param.get("name");
+		if (Util.isEmpty(name)) {
+			return new ResultData("F-1", "name을 입력해주세요.");
+		}
+
+		String email = (String) param.get("email");
+		if (Util.isEmpty(email)) {
+			return new ResultData("F-1", "email을 입력해주세요.");
+		}
+
+		return clientService.findLoginIdByNameAndEmail(param);
+	}
+
+	@PostMapping("/usr/client/doFindLoginPw")
+	@ResponseBody
+	public ResultData doFindLoginPw(@RequestParam Map<String, Object> param) {
+
+		String loginId = (String) param.get("loginId");
+		if (Util.isEmpty(loginId)) {
+			return new ResultData("F-1", "loginId를 입력해주세요.");
+		}
+
+		String email = (String) param.get("email");
+		if (Util.isEmpty(email)) {
+			return new ResultData("F-1", "email을 입력해주세요.");
+		}
+
+		return clientService.getClientByLoginIdAndEmail(param);
+	}
+
+	@GetMapping("/usr/client/doDelete")
+	@ResponseBody
+	public ResultData doDelete(int id) {
+
+		Client client = clientService.getForPrintClient(id);
+
+		if (client == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+		}
+
+		clientService.delete(id);
+
+		return new ResultData("S-1", "성공", "name", client.getName());
+	}
+>>>>>>> Stashed changes
 
 }

@@ -45,10 +45,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		registry.addInterceptor(needAdminInterceptor).addPathPatterns("/adm/**")
 				.excludePathPatterns("/adm/member/login").excludePathPatterns("/adm/member/doLogin")
 				.excludePathPatterns("/adm/member/join").excludePathPatterns("/adm/member/doJoin")
-				.excludePathPatterns("/adm/member/getLoginIdDup").excludePathPatterns("/adm/member/admByAuthKey")
-				.excludePathPatterns("/adm/member/authKey").excludePathPatterns("/adm/member/doConfirmExpert")
-				.excludePathPatterns("/adm/member/clientList").excludePathPatterns("/adm/member/expertList")
-				.excludePathPatterns("/adm/member/clientDetail").excludePathPatterns("/adm/member/expertDetail");
+				.excludePathPatterns("/adm/member/getLoginIdDup");
 
 		// 로그인
 		registry.addInterceptor(needLoginInterceptor).addPathPatterns("/**").excludePathPatterns("/")
@@ -68,7 +65,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/usr/expert/doFindLoginId").excludePathPatterns("/usr/expert/findLoginPw")
 				.excludePathPatterns("/usr/expert/doFindLoginPw").excludePathPatterns("/usr/order/list")
 				.excludePathPatterns("/usr/order/detail").excludePathPatterns("/usr/review/list")
+<<<<<<< Updated upstream
 				.excludePathPatterns("/common/**").excludePathPatterns("/usr/file/test*")
+=======
+				.excludePathPatterns("/adr/**").excludePathPatterns("/common/**").excludePathPatterns("/usr/file/test*")
+>>>>>>> Stashed changes
 				.excludePathPatterns("/usr/file/doTest*").excludePathPatterns("/test/**").excludePathPatterns("/error");
 
 		// 로그아웃

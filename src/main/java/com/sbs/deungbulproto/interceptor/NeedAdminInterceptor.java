@@ -16,6 +16,34 @@ public class NeedAdminInterceptor implements HandlerInterceptor {
 
 		boolean isAdmin = (boolean) request.getAttribute("isAdmin");
 
+		boolean isAjax = (boolean) request.getAttribute("isAjax");
+
+		if (isAdmin == false) {
+			String authKeyStatus = (String) request.getAttribute("authKeyStatus");
+
+			String resultCode = "F-A";
+			String resultMsg = "로그인 후 이용해주세요.";
+
+			if (authKeyStatus.equals("invalid")) {
+				resultCode = "F-B";
+				resultMsg = "인증키가 올바르지 않습니다.";
+			}
+
+			if (isAjax == false) {
+				response.setContentType("text/html; charset=UTF-8");
+				response.getWriter().append("<script>");
+				response.getWriter().append("alert('" + resultMsg + "');");
+				response.getWriter().append("location.replace('/adm/member/login?redirectUrl="
+						+ request.getAttribute("encodedAfterLoginUrl") + "');");
+				response.getWriter().append("</script>");
+			} else {
+				response.setContentType("application/json; charset=UTF-8");
+				response.getWriter().append("{\"resultCode\":\"" + resultCode + "\",\"msg\":\"" + resultMsg + "\"}");
+			}
+
+			return false;
+		}
+
 		return HandlerInterceptor.super.preHandle(request, response, handler);
 	}
 }

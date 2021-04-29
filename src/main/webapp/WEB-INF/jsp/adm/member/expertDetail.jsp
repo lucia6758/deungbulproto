@@ -4,37 +4,15 @@
 
 <%@ include file="../part/mainLayoutHead.jspf"%>
 
-<style>
-:root { -
-	-main-color: #4a76a8;
-}
-
-.bg-main-color {
-	background-color: var(- -main-color);
-}
-
-.text-main-color {
-	color: var(- -main-color);
-}
-
-.border-main-color {
-	border-color: var(- -main-color);
-}
-</style>
-<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
-	rel="stylesheet">
-<script
-	src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
-	defer></script>
 
 <div class="bg-gray-100">
-	<div class="w-full text-white bg-main-color">
+	<div class="w-full text-white bg-gray-500">
 		<div x-data="{ open: false }"
 			class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
 			<div class="container mx-auto my-5 p-5">
 				<div class="md:flex no-wrap md:-mx-2 ">
 					<div class="w-full md:w-3/12 md:mx-2">
-						<div class="bg-white p-3 border-t-4 border-green-400">
+						<div class="bg-white p-3">
 							<div class="image overflow-hidden">
 								<c:if test="${expert.extra__thumbImg != null}">
 									<img class="h-auto w-full mx-auto"
@@ -50,12 +28,12 @@
 						<div class="my-4"></div>
 					</div>
 
-					<div class="w-full md:w-9/12 mx-2 h-64">
+					<div class="w-full md:w-9/12 h-64">
 
 						<div class="bg-white p-3 shadow-sm rounded-sm">
 							<div
 								class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-								<span clas="text-green-500">
+								<span class="text-gray-500">
 									<svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
 										viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round"
@@ -78,6 +56,10 @@
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">아이디</div>
 										<div class="px-4 py-2">${expert.loginId}</div>
+									</div>
+									<div class="grid grid-cols-2">
+										<div class="px-4 py-2 font-semibold">평점</div>
+										<div class="px-4 py-2">${expert.extra__ratingPoint}</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">지역</div>
@@ -103,31 +85,36 @@
 										<div class="px-4 py-2 font-semibold">인증 상태</div>
 										<div class="px-4 py-2">${expert.acknowledgment_step}</div>
 									</div>
-									<div class="grid grid-rows-2">
+									<div>
 										<div class="px-4 py-2 font-semibold">인증 파일</div>
-										<div class="px-4 py-2">${expert.extra__licenseImg}</div>
+										<div class="px-4 py-2">
+											<img class="h-auto w-full mx-auto"
+												src="${expert.extra__licenseImg}" alt="" />
+										</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">인증 확인</div>
 										<div class="grid grid-cols-2 px-4 py-2">
-											<c:if test="${expert.acknowledgment_step==1}">
-												<form action="doConfirmExpert" method="POST">
-													<input type="hidden" name="confirm" value="Y" />
+											<c:if test="${expert.acknowledgment_step!=2}">
+												<form action="doConfirmExpert" method="POST"
+													onSubmit="return confirm('전문가 인증을 승인하시겠습니까?');">
+													<input type="hidden" name="confirmExpert" value="Y" />
 													<input type="hidden" name="expertId" value="${expert.id}" />
 													<button
 														class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-700 rounded shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none"
-														type="submit"
-														onclick="if ( !confirm('전문가 인증을 승인하시겠습니까?') ) return false;">승인</button>
+														type="submit">승인</button>
 												</form>
 											</c:if>
-											<form action="doConfirmExpert" method="POST">
-												<input type="hidden" name="confirm" value="N" />
-												<input type="hidden" name="expertId" value="${expert.id}" />
-												<button
-													class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-red-500 rounded shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none"
-													type="submit"
-													onclick="if ( !confirm('전문가 인증을 거절/취소 하시겠습니까?') ) return false;">거절/취소</button>
-											</form>
+											<c:if test="${expert.acknowledgment_step!=3}">
+												<form action="doConfirmExpert" method="POST"
+													onsubmit="return confirm('전문가 인증을 거절(취소)하시겠습니까?');">
+													<input type="hidden" name="confirmExpert" value="N" />
+													<input type="hidden" name="expertId" value="${expert.id}" />
+													<button
+														class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-red-500 rounded shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none"
+														type="submit">거절/취소</button>
+												</form>
+											</c:if>
 										</div>
 									</div>
 								</div>
