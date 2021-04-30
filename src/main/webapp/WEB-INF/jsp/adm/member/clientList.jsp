@@ -17,31 +17,31 @@
 				<div class="mt-2">
 					<a class="mt-2 text-gray-600 block">
 						<span
-							class="inline-flex justify-center items-center px-2 rounded-full bg-green-500 text-white">아이디</span>
+							class="inline-flex justify-center items-center px-2 rounded-md bg-gray-500 text-white">아이디</span>
 						<span>${client.loginId}</span>
 					</a>
 					<a class="mt-2 text-gray-600 block">
 						<span
-							class="inline-flex justify-center items-center px-2 rounded-full bg-green-500 text-white">이름</span>
+							class="inline-flex justify-center items-center px-2 rounded-md bg-gray-500 text-white">이름</span>
 						<span>${client.name}</span>
 					</a>
 					<a class="mt-2 text-gray-600 block">
 						<span
-							class="inline-flex justify-center items-center px-2 rounded-full bg-green-500 text-white">지역</span>
+							class="inline-flex justify-center items-center px-2 rounded-md bg-gray-500 text-white">지역</span>
 						<span>${client.region}</span>
 					</a>
 				</div>
 				<div class="flex items-center mt-4">
 					<a href="clientDetail?id=${client.id}"
-						class="text-blue-500 hover:underline" title="회원상세정보">
+						class="text-blue-800 hover:underline" title="회원상세정보">
 						<span>
 							<i class="fas fa-info"></i>
 							<span class="hidden sm:inline">회원 상세 정보</span>
 						</span>
 					</a>
 					<a onclick="if ( !confirm('이 회원을 탈퇴시키겠습니까?') ) return false;"
-						href="doDelete?id=${client.id}"
-						class="ml-2 text-blue-500 hover:underline">
+						href="../../usr/client/doDelete?id=${client.id}"
+						class="ml-2 text-blue-800 hover:underline">
 						<span>
 							<i class="fas fa-trash"></i>
 							<span class="hidden sm:inline">강제탈퇴</span>
