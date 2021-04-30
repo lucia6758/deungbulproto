@@ -105,15 +105,18 @@
 									</div>
 									<div class="grid grid-rows-2">
 										<div class="px-4 py-2 font-semibold">인증 파일</div>
-										<div class="px-4 py-2">${expert.extra__licenseImg}</div>
+										<div class="px-4 py-2">
+											<img class="h-auto w-full mx-auto"
+												src="${expert.extra__licenseImg}" alt="" />
+										</div>
 									</div>
 									<div class="grid grid-cols-2">
 										<div class="px-4 py-2 font-semibold">인증 확인</div>
 										<div class="grid grid-cols-2 px-4 py-2">
 											<c:if test="${expert.acknowledgment_step==1}">
 												<form action="doConfirmExpert" method="POST">
-													<input type="hidden" name="confirm" value="Y" />
-													<input type="hidden" name="expertId" value="${expert.id}" />
+													<input type="hidden" name="confirm" value="Y" /> <input
+														type="hidden" name="expertId" value="${expert.id}" />
 													<button
 														class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-700 rounded shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none"
 														type="submit"
@@ -121,8 +124,8 @@
 												</form>
 											</c:if>
 											<form action="doConfirmExpert" method="POST">
-												<input type="hidden" name="confirm" value="N" />
-												<input type="hidden" name="expertId" value="${expert.id}" />
+												<input type="hidden" name="confirm" value="N" /> <input
+													type="hidden" name="expertId" value="${expert.id}" />
 												<button
 													class="inline-block px-5 py-1 text-xs font-medium leading-6 text-center text-white uppercase transition bg-red-500 rounded shadow ripple hover:shadow-lg hover:bg-red-600 focus:outline-none"
 													type="submit"

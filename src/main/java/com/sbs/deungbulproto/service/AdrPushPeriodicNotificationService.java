@@ -36,6 +36,8 @@ public class AdrPushPeriodicNotificationService {
         
         notification.put("title", pushTitle);
         notification.put("body", pushBody);
+        notification.put("name", "알림이 도착했습니다.");
+        notification.put("Nick", "알림이 도착했습니다.");
         
         body.put("notification", notification);        
 

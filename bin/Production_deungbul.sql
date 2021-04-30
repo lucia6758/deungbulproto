@@ -28,7 +28,8 @@ SET regDate = NOW(),
     `region` = '대전광역시',
     `license` = '장례지도사',
     `career` = CONCAT(FLOOR(RAND() * 30) + 1,'년'),
-    `work` = 1;
+    `work` = 1,
+    deviceIdToken = "";
     
     
 # 의뢰 랜덤생성 쿼리

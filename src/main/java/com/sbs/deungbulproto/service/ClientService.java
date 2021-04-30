@@ -141,9 +141,9 @@ public class ClientService {
 		
 		// 문자로 발송
 		String clientCellPhoneNo = actor.getCellphoneNo().replaceAll("[-+.^:,]","");
-		Util.sendSms("01068271739", clientCellPhoneNo, "회원님의 임시 비밀번호는 '" + tempPassword + "' 입니다.");
+		Util.sendSms("01068271739", clientCellPhoneNo, "[상장례] 회원님의 임시 비밀번호는 '" + tempPassword + "' 입니다.");
 
-		String resultMsg = "회원님의 임시비밀번호를 문자로 발송하였습니다.";
+		String resultMsg = "회원님의 임시 비밀번호를 문자로 발송하였습니다.";
 		
 		return new ResultData("S-1", resultMsg);
 
