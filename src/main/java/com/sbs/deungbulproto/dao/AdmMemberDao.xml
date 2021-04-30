@@ -52,6 +52,9 @@
 			<if test="loginPw != null">
 				loginPw = #{loginPw},
 			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
 			<if test="cellphoneNo != null">
 				cellphoneNo = #{cellphoneNo},
 			</if>

@@ -41,6 +41,23 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			requestUrl += "?" + queryString;
 		}
 
+		boolean isAjax = false;
+
+		String isAjaxParameter = request.getParameter("isAjax");
+
+		if ( isAjaxParameter == null  ) {
+			isAjax = false;
+		}
+		else if (isAjaxParameter.equals("Y")) {
+			isAjax = true;
+		}
+
+		if (isAjax == false && request.getParameter("isAjax") != null && request.getParameter("isAjax").equals("Y")) {
+			isAjax = true;
+		}
+
+		request.setAttribute("isAjax", isAjax);
+
 		String encodedRequestUrl = Util.getUrlEncoded(requestUrl);
 
 		request.setAttribute("requestUrl", requestUrl);

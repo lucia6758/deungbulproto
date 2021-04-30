@@ -110,7 +110,7 @@
 			
 			return;
 		}
-		
+
 		form.submit();
 		JoinForm__checkAndSubmitDone = true;
 		
@@ -129,10 +129,7 @@
 		<div class="w-full">
 			<div class="logo-bar flex justify-center mt-3">
 				<a href="../home/main" class="logo">
-					<span>
-						<i class="fas fa-people-arrows"></i>
-					</span>
-					<span>상장례 관리자페이지</span>
+					<span>관리자 회원가입</span>
 				</a>
 			</div>
 			<form

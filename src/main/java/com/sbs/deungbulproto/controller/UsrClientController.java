@@ -50,7 +50,7 @@ public class UsrClientController extends BaseController {
 			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
 
-		session.setAttribute("loginedMemberId", existingClient.getId());
+		session.setAttribute("loginedClientId", existingClient.getId());
 
 		String msg = String.format("%s님 환영합니다.", existingClient.getName());
 
@@ -63,7 +63,7 @@ public class UsrClientController extends BaseController {
 	@GetMapping("/usr/client/doLogout")
 	@ResponseBody
 	public String doLogout(HttpSession session) {
-		session.removeAttribute("loginedMemberId");
+		session.removeAttribute("loginedClientId");
 
 		return Util.msgAndReplace("로그아웃 되었습니다.", "../member/login");
 	}
@@ -116,7 +116,6 @@ public class UsrClientController extends BaseController {
 			return new ResultData("F-1", "region을 입력해주세요.");
 		}
 
-
 		return clientService.join(param);
 	}
 
@@ -156,7 +155,7 @@ public class UsrClientController extends BaseController {
 		if (existingClient.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
-		
+
 		// 회원의 디바이스 아이디 토큰 업데이트	
 		String deviceIdToken = (String) Container.session.deviceIdToken;
 		if( deviceIdToken != null ) {
@@ -166,7 +165,7 @@ public class UsrClientController extends BaseController {
 				if( !deviceIdToken.equals( existingClient.getDeviceIdToken() ) ) {
 					param.put("id", existingClient.getId() );
 					param.put("deviceIdToken", deviceIdToken);
-					
+
 					clientService.modifyClient(param);
 				}
 			}
@@ -186,7 +185,7 @@ public class UsrClientController extends BaseController {
 
 		return new ResultData("S-1", "성공", "client", client);
 	}
-	
+
 	@PostMapping("/usr/client/doFindLoginId")
 	@ResponseBody
 	public ResultData doFindLoginId(@RequestParam Map<String, Object> param) {
@@ -235,6 +234,4 @@ public class UsrClientController extends BaseController {
 
 		return new ResultData("S-1", "성공", "name", client.getName());
 	}
-	
-
 }

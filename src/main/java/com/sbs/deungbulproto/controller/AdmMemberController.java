@@ -63,7 +63,7 @@ public class AdmMemberController extends BaseController {
 			return Util.msgAndBack("관리자만 접근할 수 있는 페이지 입니다.");
 		}
 
-		session.setAttribute("loginedMemberId", existingAdm.getId());
+		session.setAttribute("loginedAdmId", existingAdm.getId());
 
 		String msg = String.format("%s님 환영합니다.", existingAdm.getName());
 
@@ -75,22 +75,37 @@ public class AdmMemberController extends BaseController {
 	@RequestMapping("/adm/member/doLogout")
 	@ResponseBody
 	public String doLogout(HttpSession session) {
-		session.removeAttribute("loginedMemberId");
+		session.removeAttribute("loginedAdmId");
 
 		return Util.msgAndReplace("로그아웃 되었습니다.", "../member/login");
 	}
 
-	@RequestMapping("/adm/member/doModify")
-	@ResponseBody
-	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		if (param.isEmpty()) {
-			return new ResultData("F-2", "수정할 정보를 입력해주세요.");
+	@RequestMapping("/adm/member/modify")
+	public String showModify(Integer id, HttpServletRequest req) {
+		if (id == null) {
+			return msgAndBack(req, "id를 입력해주세요.");
 		}
 
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-		param.put("id", loginedMemberId);
+		Adm adm = admMemberService.getAdm(id);
 
-		return admMemberService.modifyMember(param);
+		if (adm == null) {
+			return msgAndBack(req, "존재하지 않는 회원번호 입니다.");
+		}
+
+		req.setAttribute("adm", adm);
+
+		return "adm/member/modify";
+	}
+
+	@RequestMapping("/adm/member/doModify")
+	@ResponseBody
+	public String doModify(@RequestParam Map<String, Object> param, HttpSession session) {
+		int loginedAdmId = (int) session.getAttribute("loginedAdmId");
+		param.put("id", loginedAdmId);
+
+		ResultData modifyMemberRd = admMemberService.modifyMember(param);
+		String redirectUrl = "/adm/home/main";
+		return Util.msgAndReplace(modifyMemberRd.getMsg(), redirectUrl);
 	}
 
 	@RequestMapping("/adm/member/join")
@@ -188,7 +203,6 @@ public class AdmMemberController extends BaseController {
 				}
 			}			
 		}
-
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingAdm.getName()), "authKey",
 				existingAdm.getAuthKey(), "id", existingAdm.getId(), "name", existingAdm.getName());
 	}
@@ -235,14 +249,14 @@ public class AdmMemberController extends BaseController {
 
 	@RequestMapping("/adm/member/doConfirmExpert")
 	@ResponseBody
-	public String doConfirmExpert(int expertId, String confirm) {
-		if (confirm.contains("Y")) {
+	public String doConfirmExpert(int expertId, String confirmExpert) {
+		if (confirmExpert.contains("Y")) {
 			expertService.confirmExpert(expertId);
 		} else {
 			expertService.rejectExpert(expertId);
 		}
 
-		return Util.msgAndBack("전문가 승인상태가 변경되었습니다.");
+		return Util.msgAndReplace("전문가 승인상태가 변경되었습니다.", "expertDetail?id=" + expertId);
 	}
 
 	@GetMapping("/adm/member/getLoginIdDup")

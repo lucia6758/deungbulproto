@@ -3,10 +3,8 @@
 <%@ include file="head.jspf"%>
 <header class="top-bar h-20 bg-white">
 	<div class="container mx-auto h-full flex">
-		<a href="/adm/home/main" class="logo flex items-center ml-2">
-			<span>
-				<i class="fas fa-people-arrows"></i>
-			</span>
+		<a href="/adm/home/main"
+			class="logo flex text-xl items-center ml-2 whitespace-nowrap">
 			<span>상장례 관리자페이지</span>
 		</a>
 
@@ -14,24 +12,28 @@
 
 		<nav class="menu-box-1">
 			<ul class="flex h-full">
-			    <li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/home/main">
-						<span>관리자 홈</span>
-					</a>
-				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/member/clientList">
+					<a class="text-lg px-4 flex items-center h-full hover:underline"
+						href="/adm/member/clientList">
 						<span>일반회원 관리</span>
 					</a>
 				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/member/expertList">
+					<a class="text-lg px-4 flex items-center h-full hover:underline"
+						href="/adm/member/expertList">
 						<span>전문가회원 관리</span>
 					</a>
 				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/member/doLogout">
-						<span>관리자 로그아웃</span>
+					<a class="text-lg px-4 flex items-center h-full hover:underline"
+						href="/adm/member/modify?id=${loginedAdmId}">
+						<span>회원정보수정</span>
+					</a>
+				</li>
+				<li>
+					<a class="text-lg px-4 flex items-center h-full hover:underline"
+						href="/adm/member/doLogout">
+						<span>로그아웃</span>
 					</a>
 				</li>
 			</ul>
