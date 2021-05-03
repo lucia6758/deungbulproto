@@ -10,5 +10,10 @@ public class AdmHomeController {
 	public String showMain() {
 		return "adm/home/main";
 	}
+	
+	@RequestMapping("/*")
+	public String redirectMain() {
+		return "adm/home/main";
+	}
 
 }

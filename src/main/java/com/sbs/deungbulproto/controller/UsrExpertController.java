@@ -285,18 +285,17 @@ public class UsrExpertController extends BaseController {
 	}
 
 	@GetMapping("/usr/expert/doDelete")
-	@ResponseBody
-	public ResultData doDelete(int id) {
+	public String doDelete(int id) {
 
 		Expert expert = expertService.getForPrintExpert(id);
 
 		if (expert == null) {
-			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+			return "로그인 후 이용 가능합니다.";
 		}
 
 		expertService.delete(id);
 
-		return new ResultData("S-1", "성공", "name", expert.getName());
+		return "adm/home/main";
 	}
 
 }

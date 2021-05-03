@@ -221,17 +221,16 @@ public class UsrClientController extends BaseController {
 	}
 
 	@GetMapping("/usr/client/doDelete")
-	@ResponseBody
-	public ResultData doDelete(int id) {
+	public String doDelete(int id) {
 
 		Client client = clientService.getForPrintClient(id);
 
 		if (client == null) {
-			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+			return "로그인 후 이용가능합니다.";
 		}
 
 		clientService.delete(id);
 
-		return new ResultData("S-1", "성공", "name", client.getName());
+		return "adm/home/main";
 	}
 }
